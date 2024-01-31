@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+
+  db:
+
+    image: mysql
+
+    command: --default-authentication-plugin=mysql_native_password
+    env_file:
+      - .env
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+
+      MYSQL_DATABASE: 'react_diner'
+
+    ports:
+
+      - '3306:3306'
+
+    volumes:
+
+      - ../db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    restart: always
+
+  adminer:
+
+    image: adminer
+
+    restart: always
+
+    ports:
+
+      - '8080:8080'
