@@ -13,7 +13,6 @@ services:
     environment:
 
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-
       MYSQL_DATABASE: 'react_diner'
 
     ports:
