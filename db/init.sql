@@ -44,7 +44,7 @@ DELIMITER ;
 
 -- Seed items
 
-   CALL InsertMenuItem('Mac & Cheese', 8.99, 'Creamy cheddar cheese mixed with perfectly cooked macaroni, topped with crispy breadcrumbs. A classic comfort food.', 'images/mac-and-cheese.jpg');
+    CALL InsertMenuItem('Mac & Cheese', 8.99, 'Creamy cheddar cheese mixed with perfectly cooked macaroni, topped with crispy breadcrumbs. A classic comfort food.', 'images/mac-and-cheese.jpg');
     CALL InsertMenuItem('Margherita Pizza', 12.99, 'A classic pizza with fresh mozzarella, tomatoes, and basil on a thin and crispy crust.', 'images/margherita-pizza.jpg');
     CALL InsertMenuItem('Caesar Salad', 7.99, 'Romaine lettuce tossed in Caesar dressing, topped with croutons and parmesan shavings.', 'images/caesar-salad.jpg');
     CALL InsertMenuItem('Spaghetti Carbonara', 10.99, 'Al dente spaghetti with a creamy sauce made from egg yolk, pecorino cheese, pancetta, and pepper.', 'images/spaghetti-carbonara.jpg');
