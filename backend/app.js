@@ -9,5 +9,10 @@ app.get('/health', (req, res) => {
 app.use(express.json());
 app.use('/api/menuitems', menuRouter);
 
+// Default route
+app.get("*", (req, res) => {
+    res.status(404).json({message: "NOT FOUND"});
+  });
+
 
 module.exports = app;
