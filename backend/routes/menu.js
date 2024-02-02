@@ -1,8 +1,10 @@
 const express = require('express');
-const {getMenu} = require('../controllers/menu');
+const {getMenuItems} = require('../controllers/menu');
+const {postMenuItem} = require('../controllers/menu');
 
 const router = express.Router();
 
 module.exports = router;
 
-router.get('/', getMenu);
+router.get('/', getMenuItems);
+router.post('/', postMenuItem);

@@ -6,6 +6,12 @@ app.get('/health', (req, res) => {
     res.send("OK");
 });
 
-app.use('/api/menu', menuRouter);
+app.use(express.json());
+app.use((req, res, next) => {
+    console.log('Incoming Request:', req.method, req.url, req.body);
+    next();
+});
+app.use('/api/menuitems', menuRouter);
+
 
 module.exports = app;

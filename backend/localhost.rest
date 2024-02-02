@@ -2,15 +2,30 @@ GET http://localhost:5000/health
 
 #########
 
-GET http://localhost:5000/api/menu
+GET http://localhost:5000/api/menuitems
 
 ###############
 
-POST http://localhost:5000/api/
+POST http://localhost:5000/api/menuitems
+
 Content-Type: application/json
 
 {
+    "name": "Surströmming",
+    "price": 3.50,
+    "description": "You don't want to know",
+    "image": "srst.jpg"
 }
 
 #####
+
+POST http://localhost:5000/api/menuitems
+Content-Type: application/json
+
+{
+    "name": "Mustamakkara",
+    "price": 7.50,
+    "description": "Mansesta nääs",
+    "image": "tapola.jpg"
+}
 
