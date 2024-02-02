@@ -27,7 +27,16 @@ const postMenuItem = async (req, res) =>{
 
 const updateMenuItem = async (req, res) =>{
     try {
-        const response = await menu.updateMenuItem(req.params.id, req.body)
+        const response = await menu.updateMenuItem(req.params.id, req.body);
+        res.json(response);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
+const deleteMenuItem = async (req, res) => {
+    try {
+        const response = await menu.deleteMenuItem(req.params.id);
         res.json(response);
     } catch (error) {
         res.status(500).json({message: error.message});
@@ -37,5 +46,6 @@ const updateMenuItem = async (req, res) =>{
 module.exports = {
     getMenuItems,
     postMenuItem,
-    updateMenuItem
+    updateMenuItem,
+    deleteMenuItem
 };

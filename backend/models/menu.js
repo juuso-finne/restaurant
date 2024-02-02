@@ -34,6 +34,17 @@ const menu = {
         } catch (error) {
             throw new Error(error);
         }
+    },
+
+    deleteMenuItem: async(id) => {
+        try {
+            const query = 'DELETE FROM `menu_items` WHERE id = ?';
+            const connection = await pool.getConnection();
+            const [results] = await connection.query(query, id);
+            return results;
+        } catch(error){
+            throw new Error(error);
+        }
     }
 }
 
