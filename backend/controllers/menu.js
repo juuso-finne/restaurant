@@ -3,7 +3,7 @@ const menu = require('../models/menu');
 const getMenuItems = async (req, res) =>{
     const response = await menu.getMenuItems();
     try {
-        if(response.length > 0){
+        if(response.length !== 0){
             res.json(response);
         } else {
             res.status(404).end();
@@ -25,7 +25,17 @@ const postMenuItem = async (req, res) =>{
     }
 }
 
+const updateMenuItem = async (req, res) =>{
+    try {
+        const response = await menu.updateMenuItem(req.params.id, req.body)
+        res.json(response);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
 module.exports = {
     getMenuItems,
-    postMenuItem
+    postMenuItem,
+    updateMenuItem
 };

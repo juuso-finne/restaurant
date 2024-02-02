@@ -7,19 +7,6 @@ GET http://localhost:5000/api/menuitems
 ###############
 
 POST http://localhost:5000/api/menuitems
-
-Content-Type: application/json
-
-{
-    "name": "Surströmming",
-    "price": 3.50,
-    "description": "You don't want to know",
-    "image": "srst.jpg"
-}
-
-#####
-
-POST http://localhost:5000/api/menuitems
 Content-Type: application/json
 
 {
@@ -29,3 +16,14 @@ Content-Type: application/json
     "image": "tapola.jpg"
 }
 
+#############
+
+PUT http://localhost:5000/api/menuitems/d21
+Content-Type: application/json
+
+{
+    "name": "HK:n sininen",
+    "price": 5.50,
+    "description": "Suomen suosituin vihannes",
+    "image": "bleu.jpg"
+}
