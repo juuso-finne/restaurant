@@ -30,6 +30,7 @@ const menu = {
             const query = 'UPDATE `menu_items` SET ? WHERE id = ?';
             const connection = await pool.getConnection();
             const [results] = await connection.query(query, [item, id]);
+            connection.release();
             return results;
         } catch (error) {
             throw new Error(error);
@@ -41,6 +42,7 @@ const menu = {
             const query = 'DELETE FROM `menu_items` WHERE id = ?';
             const connection = await pool.getConnection();
             const [results] = await connection.query(query, id);
+            connection.release();
             return results;
         } catch(error){
             throw new Error(error);

@@ -10,7 +10,6 @@ POST http://localhost:5000/api/menuitems
 Content-Type: application/json
 
 {
-    "name": "Mustamakkara",
     "price": 7.50,
     "description": "Mansesta nääs",
     "image": "tapola.jpg"
