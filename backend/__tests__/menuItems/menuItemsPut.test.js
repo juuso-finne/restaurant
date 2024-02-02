@@ -21,7 +21,7 @@ describe("Menuitems PUT", () => {
         }
 
         const testId = await getExistingId();
-        // Edit the item
+        // Try to update
         const response = await request(app)
             .put(`/api/menuitems/${testId}`)
             .set("Accept", "application/json")
@@ -54,7 +54,7 @@ describe("Menuitems PUT", () => {
             const testObjectClone = {...testObject};
             testObjectClone[prop] = '';
 
-            // Post the new test object
+            // Try to update
             const response = await request(app)
             .put(`/api/menuitems/${testId}`)
             .set("Accept", "application/json")
@@ -90,7 +90,7 @@ describe("Menuitems PUT", () => {
             const testObjectClone = {...testObject};
             delete testObjectClone[prop];
 
-            // Post the new test object
+            // Try to update
             const response = await request(app)
             .put(`/api/menuitems/${testId}`)
             .set("Accept", "application/json")
@@ -102,6 +102,27 @@ describe("Menuitems PUT", () => {
             expect(response.headers['content-type']).toMatch(/json/);
             expect(response.body.message).toMatch(`\"${prop}\" is required`);
         }
+    });
+
+    test("returns an error if the item is not found", async() =>{
+        const testObject = {
+            name: "Surströmming",
+            price: "2.60",
+            description: "You don't wanna know",
+            image: "srst.jpg"
+        }
+
+        // Try to update
+        const response = await request(app)
+            .put(`/api/menuitems/nonExistingId`)
+            .set("Accept", "application/json")
+            .set("Content", "application/json")
+            .send(testObject);
+
+        // Check the response
+        expect(response.status).toEqual(404);
+        expect(response.headers['content-type']).toMatch(/json/);
+        expect(response.body.message).toMatch("Item nonExistingId not found");
     });
 });
 
