@@ -8,8 +8,10 @@ GET http://localhost:5000/api/menuitems
 
 POST http://localhost:5000/api/menuitems
 Content-Type: application/json
+Authorization: BEARER {{authToken}}
 
 {
+    "name": "Mustamakkara",
     "price": 7.50,
     "description": "Mansesta nääs",
     "image": "tapola.jpg"
@@ -17,8 +19,9 @@ Content-Type: application/json
 
 #############
 
-PUT http://localhost:5000/api/menuitems/d40
+PUT http://localhost:5000/api/menuitems/d27
 Content-Type: application/json
+Authorization: BEARER {{authToken}}
 
 {
     "name": "HK:n sininen",
@@ -29,7 +32,8 @@ Content-Type: application/json
 
 ####################
 
-DELETE http://localhost:5000/api/menuitems/d39
+DELETE http://localhost:5000/api/menuitems/d27
+Authorization: BEARER {{authToken}}
 
 ########
 
@@ -37,7 +41,21 @@ POST http://localhost:5000/api/users/signup
 Content-Type: application/json
 
 {
-    "name": "Allan Smith",
-    "email": "allan@smith.com",
-    "password": "allan123"
+    "name": "Petter Pettersson",
+    "email": "petter@pettersson.com",
+    "password": "pettersson1234"
 }
+
+######
+# @name login
+POST http://localhost:5000/api/users/login
+Content-Type: application/json
+
+{
+    "email": "petter@pettersson.com",
+    "password": "pettersson1234"
+}
+
+####
+
+@authToken = {{login.response.body.token}}
