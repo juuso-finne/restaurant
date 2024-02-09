@@ -30,3 +30,14 @@ Content-Type: application/json
 ####################
 
 DELETE http://localhost:5000/api/menuitems/d39
+
+########
+
+POST http://localhost:5000/api/users/signup
+Content-Type: application/json
+
+{
+    "name": "Allan Smith",
+    "email": "allan@smith.com",
+    "password": "allan123"
+}

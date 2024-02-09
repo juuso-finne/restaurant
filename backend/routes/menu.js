@@ -9,9 +9,9 @@ const {
 
 const router = express.Router();
 
-module.exports = router;
-
 router.get('/', getMenuItems);
 router.post('/', postMenuItem);
 router.put('/:id', updateMenuItem)
 router.delete('/:id', deleteMenuItem);
+
+module.exports = router;

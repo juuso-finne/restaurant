@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const menuRouter = require('./routes/menu');
+const usersRouter = require('./routes/users');
 
 app.get('/health', (req, res) => {
     res.send("OK");
@@ -8,6 +9,7 @@ app.get('/health', (req, res) => {
 
 app.use(express.json());
 app.use('/api/menuitems', menuRouter);
+app.use('/api/users', usersRouter);
 
 // Default route
 app.get("*", (req, res) => {
