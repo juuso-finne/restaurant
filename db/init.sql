@@ -65,3 +65,13 @@ DELIMITER ;
     CALL InsertMenuItem('Lemon Cheesecake', 6.99, 'A creamy cheesecake with a tangy lemon flavor, served on a crumbly biscuit base.', 'images/lemon-cheesecake.jpg');
     CALL InsertMenuItem('Falafel Wrap', 8.99, 'Crispy falafels wrapped in a warm pita with lettuce, tomatoes, and a tahini sauce.', 'images/falafel-wrap.jpg');
 
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` varchar(36) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password_hash` varchar(60) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
