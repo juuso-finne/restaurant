@@ -7,20 +7,20 @@ const jwt = require('jsonwebtoken');
 describe("User login", () => {
     const testUser = {
         name: "Test User",
-        email: "test1@user.com",
+        email: "test3@user.com",
         password: "testuser1234"
-    }
+    };
 
     const {name, ...credentials} = testUser;
 
     beforeAll(async () => {
 
         // Create a test user to the database
-        const response = await request(app)
-        .post("/api/users/signup")
-        .set("Accept", "application/json")
-        .send(testUser);
-    })
+        await request(app)
+            .post("/api/users/signup")
+            .set("Accept", "application/json")
+            .send(testUser);
+    });
 
     test("should log the user in, given the correct email and password", async () =>{
 
@@ -42,6 +42,6 @@ describe("User login", () => {
     afterAll(async () => {
         await pool.query('DELETE FROM `users` WHERE `email` = ?', testUser.email);
         await pool.end(); // Close the connection pool
-    })
+    });
 
 })

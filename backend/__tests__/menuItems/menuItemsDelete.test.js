@@ -14,29 +14,24 @@ const getExistingId = async () =>{
 
 describe("Menuitems DELETE", () => {
 
-    const loggedInUser = {
-        name: "",
-        email: "",
-        token: ""
-    }
+    const testUser = {
+        name: "Test User",
+        email: "test2@user.com",
+        password: "testuser1234"
+    };
 
-    beforeAll(async () =>{
+    let token = "";
 
-        const data = {
-            email: process.env.DB_TEST_USERNAME,
-            password: process.env.DB_TEST_PASSWORD
-        };
+    beforeAll(async () => {
 
+        // Create a test user to the database
         const response = await request(app)
-            .post("/api/users/login")
-            .set("Accept", "application/json")
-            .send(data);
+        .post("/api/users/signup")
+        .set("Accept", "application/json")
+        .send(testUser);
 
-        loggedInUser.name = response.body.name;
-        loggedInUser.email = response.body.email;
-        loggedInUser.token = response.body.token;
+        token = response.body.token;
     });
-
 
     test("should delete the item from the database", async () => {
         const testId = await getExistingId();
@@ -44,7 +39,7 @@ describe("Menuitems DELETE", () => {
         const response = await request(app)
             .delete(`/api/menuitems/${testId}`)
             .set("Accept", "application/json")
-            .set("Authorization", "BEARER " + loggedInUser.token)
+            .set("Authorization", "BEARER " + token)
 
         // Check the response
         expect(response.status).toEqual(200);
@@ -58,7 +53,7 @@ describe("Menuitems DELETE", () => {
         const response = await request(app)
             .delete(`/api/menuitems/${testId}`)
             .set("Accept", "application/json")
-            .set("Authorization", "BEARER " + loggedInUser.token)
+            .set("Authorization", "BEARER " + token)
 
         // Check the response
         expect(response.status).toEqual(404);
@@ -80,6 +75,7 @@ describe("Menuitems DELETE", () => {
     });
 
     afterAll(async () => {
+        await pool.query('DELETE FROM `users` WHERE `email` = ?', testUser.email);
         await pool.end();
     });
 });

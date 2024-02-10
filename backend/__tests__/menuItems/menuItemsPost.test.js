@@ -4,11 +4,12 @@ const app = require("../../app");
 const pool = require("../../db/pool");
 
 describe("Menuitems POST", () => {
-    const loggedInUser = {
-        name: "",
-        email: "",
-        token: ""
-    }
+    const testUser = {
+        name: "Test User",
+        email: "test0@user.com",
+        password: "testuser1234"
+    };
+
 
     const testObject = {
         name: "Mustamakkara",
@@ -17,23 +18,18 @@ describe("Menuitems POST", () => {
         image: "tapola.jpg"
     }
 
-       beforeAll(async () =>{
+    let token = "";
 
-        const data = {
-            email: process.env.DB_TEST_USERNAME,
-            password: process.env.DB_TEST_PASSWORD
-        };
+    beforeAll(async () => {
 
+        // Create a test user to the database
         const response = await request(app)
-            .post("/api/users/login")
-            .set("Accept", "application/json")
-            .send(data);
+        .post("/api/users/signup")
+        .set("Accept", "application/json")
+        .send(testUser);
 
-        loggedInUser.name = response.body.name;
-        loggedInUser.email = response.body.email;
-        loggedInUser.token = response.body.token;
+        token = response.body.token;
     });
-
 
     test("should create a new item to the database", async () => {
 
@@ -42,7 +38,7 @@ describe("Menuitems POST", () => {
             .post("/api/menuitems")
             .set("Accept", "application/json")
             .set("Content", "application/json")
-            .set("Authorization", "BEARER " + loggedInUser.token)
+            .set("Authorization", "BEARER " + token)
             .send(testObject);
 
         // Check the response
@@ -78,7 +74,7 @@ describe("Menuitems POST", () => {
             .post("/api/menuitems")
             .set("Accept", "application/json")
             .set("Content", "application/json")
-            .set("Authorization", "BEARER " + loggedInUser.token)
+            .set("Authorization", "BEARER " + token)
             .send(testObjectClone);
 
             // Check the response
@@ -107,7 +103,7 @@ describe("Menuitems POST", () => {
             .post("/api/menuitems")
             .set("Accept", "application/json")
             .set("Content", "application/json")
-            .set("Authorization", "BEARER " + loggedInUser.token)
+            .set("Authorization", "BEARER " + token)
             .send(testObjectClone);
 
             // Check the response
@@ -141,7 +137,7 @@ describe("Menuitems POST", () => {
         .post("/api/menuitems/")
         .set("Accept", "application/json")
         .set("Content", "application/json")
-        .set("Authorization", "BEARER " + loggedInUser.token)
+        .set("Authorization", "BEARER " + token)
         .send(testObjectClone);
 
         // Check the response
@@ -151,6 +147,7 @@ describe("Menuitems POST", () => {
     })
 
     afterAll(async () => {
+        await pool.query('DELETE FROM `users` WHERE `email` = ?', testUser.email);
         await pool.end(); // Close the connection pool
     });
 });

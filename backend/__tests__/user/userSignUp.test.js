@@ -9,7 +9,7 @@ describe("User signup", () => {
 
     const testUser = {
         name: "Test User",
-        email: "test@user.com",
+        email: "test4@user.com",
         password: "testuser1234"
     }
 
@@ -50,7 +50,7 @@ describe("User signup", () => {
             expect(response.headers['content-type']).toMatch(/json/);
             expect(response.body.message).toMatch(`\"${prop}\" is not allowed to be empty`);
         }
-    })
+    });
 
     test("should not accept missing fields", async () =>{
         const properties = ["name", "email", "password"]
@@ -70,7 +70,7 @@ describe("User signup", () => {
             expect(response.headers['content-type']).toMatch(/json/);
             expect(response.body.message).toMatch(`\"${prop}\" is required`);
         }
-    })
+    });
 
     test("should validate e-mail address", async () =>{
 
@@ -87,7 +87,7 @@ describe("User signup", () => {
         expect(response.status).toEqual(400);
         expect(response.headers['content-type']).toMatch(/json/);
         expect(response.body.message).toMatch(`\"email\" must be a valid email`);
-    })
+    });
 
     test("should not allow duplicate e-mails in db", async () =>{
 
@@ -102,7 +102,7 @@ describe("User signup", () => {
         expect(response.status).toEqual(422);
         expect(response.headers['content-type']).toMatch(/json/);
         expect(response.body.message).toMatch("User already exists");
-    })
+    });
 
     test("should not allow extra properties", async () =>{
         const testUserClone = {...testUser, extraProperty:"Does not belong here"};
@@ -118,10 +118,10 @@ describe("User signup", () => {
         expect(response.status).toEqual(400);
         expect(response.headers['content-type']).toMatch(/json/);
         expect(response.body.message).toMatch("\"extraProperty\" is not allowed");
-    })
+    });
 
     afterAll(async () => {
         await pool.query('DELETE FROM `users` WHERE `email` = ?', testUser.email);
         await pool.end(); // Close the connection pool
-    })
+    });
 })
