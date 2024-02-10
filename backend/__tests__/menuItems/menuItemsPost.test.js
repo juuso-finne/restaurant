@@ -28,27 +28,6 @@ describe("Menuitems POST", () => {
         loggedInUser.token = response.body.token;
     });
 
-/*     beforeAll(async () =>{
-
-        const data = {
-            name: "Admin Adminsson",
-            email: "admin2@abc.com",
-            password: "adminadminsson"
-        };
-
-        pool.query("DELETE FROM `users` WHERE `email` = ?", data.email);
-
-        const response = await request(app)
-            .post("/api/users/signup")
-            .set("Accept", "application/json")
-            .send(data);
-
-        loggedInUser.name = response.body.name;
-        loggedInUser.email = response.body.email;
-        loggedInUser.token = response.body.token;
-    });
-
-*/
 
     test("should create a new item to the database", async () => {
         const testObject = {

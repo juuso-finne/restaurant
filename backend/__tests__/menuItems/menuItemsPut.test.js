@@ -36,25 +36,6 @@ describe("Menuitems PUT", () => {
         loggedInUser.token = response.body.token;
     });
 
-/*     beforeAll(async () =>{
-
-        const data = {
-            name: "Admin Adminsson",
-            email: "admin1@abc.com",
-            password: "adminadminsson"
-        };
-
-        await pool.query("DELETE FROM `users` WHERE `email` = ?", data.email);
-
-        const response = await request(app)
-            .post("/api/users/signup")
-            .set("Accept", "application/json")
-            .send(data);
-
-        loggedInUser.name = response.body.name;
-        loggedInUser.email = response.body.email;
-        loggedInUser.token = response.body.token;
-    }); */
 
     test("should update an item in the database", async () => {
         const testObject = {
