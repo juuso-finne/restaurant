@@ -42,7 +42,7 @@ Content-Type: application/json
 
 {
     "name": "Petter Pettersson",
-    "email": "petter@pettersson.com",
+    "email": "petterpettersson.com",
     "password": "pettersson1234"
 }
 

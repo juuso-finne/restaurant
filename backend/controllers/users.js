@@ -9,23 +9,30 @@ const signUpUser = async (req, res) => {
     let hashedPassword;
     let status = 201;
     let returnObject = {};
+    let existingUsers = []
 
     try {
-        hashedPassword = await bcrypt.hash(password, 12);
-
         const { error: valError } = signUpInfoSchema.validate(req.body);
-        const existingUsers = email ? await users.findUserByEmail(email) : [];
-
         if (valError){
             // In case of invalid input
             status = 400;
             returnObject.message = valError.details[0].message;
-        } else if(existingUsers.length > 0){
-            // In case of duplicate email
-            status = 422;
-            returnObject = {message: "User already exists"};
+
         } else{
+            // Check for duplicate email
+            existingUsers = await users.findUserByEmail(email);
+            if (existingUsers.length > 0){
+                status = 422;
+                returnObject = {message: "User already exists"};
+            }
+        }
+
+        if(status == 201){
             // Everything good
+
+            // Hash the password
+            hashedPassword = await bcrypt.hash(password, 12);
+
             const newUser={
                 id: v4(),
                 name,
