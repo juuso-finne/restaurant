@@ -19,6 +19,13 @@ describe("Menuitems PUT", () => {
         token: ""
     }
 
+    const testObject = {
+        name: "Surströmming",
+        price: "2.60",
+        description: "You don't wanna know",
+        image: "srst.jpg"
+    }
+
     beforeAll(async () =>{
 
         const data = {
@@ -38,12 +45,7 @@ describe("Menuitems PUT", () => {
 
 
     test("should update an item in the database", async () => {
-        const testObject = {
-            name: "Surströmming",
-            price: "2.60",
-            description: "You don't wanna know",
-            image: "srst.jpg"
-        }
+
 
         const testId = await getExistingId();
         // Try to update
@@ -62,13 +64,6 @@ describe("Menuitems PUT", () => {
     });
 
     test("should not accept empty properties", async () =>{
-        const testObject = {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
-
         const testId = await getExistingId();
 
         // Check all properties
@@ -99,12 +94,6 @@ describe("Menuitems PUT", () => {
     });
 
     test("should not accept missing properties", async () =>{
-        const testObject = {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
 
         const testId = await getExistingId();
 
@@ -133,12 +122,6 @@ describe("Menuitems PUT", () => {
     });
 
     test("returns an error if the item is not found", async() =>{
-        const testObject = {
-            name: "Surströmming",
-            price: "2.60",
-            description: "You don't wanna know",
-            image: "srst.jpg"
-        }
 
         // Try to update
         const response = await request(app)

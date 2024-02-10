@@ -2,13 +2,19 @@ const {describe, expect, test, beforeAll} = require("@jest/globals");
 const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
-const supertest = require("supertest");
 
 describe("Menuitems POST", () => {
     const loggedInUser = {
         name: "",
         email: "",
         token: ""
+    }
+
+    const testObject = {
+        name: "Mustamakkara",
+        price: "7.50",
+        description: "Mansesta nääs",
+        image: "tapola.jpg"
     }
 
        beforeAll(async () =>{
@@ -30,12 +36,7 @@ describe("Menuitems POST", () => {
 
 
     test("should create a new item to the database", async () => {
-        const testObject = {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
+
 
 
         // Post the test object
@@ -63,12 +64,6 @@ describe("Menuitems POST", () => {
     });
 
     test("should not accept empty properties", async () =>{
-        const testObject = {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
 
         // Check all properties
         const properties = ["name", "price", "description", "image"]
@@ -99,12 +94,6 @@ describe("Menuitems POST", () => {
     });
 
     test("should not accept missing properties", async () =>{
-        const testObject = {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
 
         // Check all properties
         const properties = ["name", "price", "description", "image"]
@@ -131,12 +120,6 @@ describe("Menuitems POST", () => {
     });
 
     test("should not allow posting without logging in", async () =>{
-        const testObject = {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
 
         // Post the test object
         const response = await request(app)
