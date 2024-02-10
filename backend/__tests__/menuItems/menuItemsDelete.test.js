@@ -23,8 +23,25 @@ describe("Menuitems DELETE", () => {
     beforeAll(async () =>{
 
         const data = {
+            email: process.env.DB_TEST_USERNAME,
+            password: process.env.DB_TEST_PASSWORD
+        };
+
+        const response = await request(app)
+            .post("/api/users/login")
+            .set("Accept", "application/json")
+            .send(data);
+
+        loggedInUser.name = response.body.name;
+        loggedInUser.email = response.body.email;
+        loggedInUser.token = response.body.token;
+    });
+
+/*     beforeAll(async () =>{
+
+        const data = {
             name: "Admin Adminsson",
-            email: "admin@abc.com",
+            email: "admin3@abc.com",
             password: "adminadminsson"
         };
 
@@ -38,7 +55,7 @@ describe("Menuitems DELETE", () => {
         loggedInUser.name = response.body.name;
         loggedInUser.email = response.body.email;
         loggedInUser.token = response.body.token;
-    });
+    }); */
 
 
     test("should delete the item from the database", async () => {
@@ -83,6 +100,6 @@ describe("Menuitems DELETE", () => {
     });
 
     afterAll(async () => {
-        await pool.end(); // Close the connection pool
+        await pool.end();
     });
 });
