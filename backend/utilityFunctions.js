@@ -2,6 +2,7 @@ const pool = require('./db/pool');
 const jwt = require('jsonwebtoken');
 
 const execute = async (query, params) =>{
+    // Execute an SQL query with given parameters
     try {
         const connection = await pool.getConnection()
         const [results] = await connection.query(query, params);
@@ -13,6 +14,7 @@ const execute = async (query, params) =>{
 }
 
 const createToken = (userData, lifetime = "2h") => {
+    // Generate a JWT token for a given user data
     return jwt.sign(
         {
         id: userData.id,

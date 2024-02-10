@@ -19,7 +19,7 @@ Authorization: BEARER {{authToken}}
 
 #############
 
-PUT http://localhost:5000/api/menuitems/d27
+PUT http://localhost:5000/api/menuitems/d45
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 

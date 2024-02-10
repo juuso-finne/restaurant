@@ -37,8 +37,6 @@ describe("Menuitems POST", () => {
 
     test("should create a new item to the database", async () => {
 
-
-
         // Post the test object
         const postResponse = await request(app)
             .post("/api/menuitems")
@@ -134,6 +132,23 @@ describe("Menuitems POST", () => {
         expect(response.body.message).toMatch(`Authorization failed`);
 
     });
+
+    test("should not allow extra properties", async () =>{
+        const testObjectClone = {...testObject, extraProperty: "Does not belong here"};
+
+        // Try to post
+        const response = await request(app)
+        .post("/api/menuitems/")
+        .set("Accept", "application/json")
+        .set("Content", "application/json")
+        .set("Authorization", "BEARER " + loggedInUser.token)
+        .send(testObjectClone);
+
+        // Check the response
+        expect(response.status).toEqual(400);
+        expect(response.headers['content-type']).toMatch(/json/);
+        expect(response.body.message).toMatch("\"extraProperty\" is not allowed");
+    })
 
     afterAll(async () => {
         await pool.end(); // Close the connection pool
