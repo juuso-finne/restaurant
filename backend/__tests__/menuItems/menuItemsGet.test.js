@@ -1,6 +1,7 @@
 const {describe, expect, test} = require("@jest/globals");
 const request = require("supertest");
 const app = require("../../app");
+const pool = require("../../db/pool");
 
 describe("Menuitems GET", () => {
 
@@ -13,5 +14,7 @@ describe("Menuitems GET", () => {
         expect(response.headers['content-type']).toMatch(/json/);
     });
 
-
+    afterAll(async() => {
+        await pool.end();
+    })
 });
