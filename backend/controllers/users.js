@@ -2,7 +2,7 @@ const users = require('../models/users');
 const { loginInfoSchema, signUpInfoSchema }  = require('../schemas');
 const bcrypt = require('bcryptjs');
 const { v4 } = require('uuid');
-const { createToken } = require('../utilityFunctions');
+const { createToken } = require('../utilityFunctions/authUtilities');
 
 const signUpUser = async (req, res) => {
     const {name, email, password} = req.body;

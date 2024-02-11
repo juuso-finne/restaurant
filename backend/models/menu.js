@@ -1,5 +1,5 @@
 const pool = require('../db/pool');
-const { execute } = require('../utilityFunctions');
+const { execute } = require('../utilityFunctions/dbUtilities');
 
 const menu = {
     getMenuItems: async() =>{

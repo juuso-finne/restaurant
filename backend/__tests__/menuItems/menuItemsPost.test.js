@@ -1,4 +1,5 @@
-const {describe, expect, test, beforeAll} = require("@jest/globals");
+const { describe, expect, test, beforeAll } = require("@jest/globals");
+const { checkEmptyProps, checkMissingProps } = require("../../utilityFunctions/testUtilities");
 const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
@@ -58,59 +59,11 @@ describe("Menuitems POST", () => {
     });
 
     test("should not accept empty properties", async () =>{
-
-        // Check all properties
-        const properties = ["name", "price", "description", "image"]
-
-
-        for (const prop of properties){
-
-            // Make a copy of the test object and set the tested property to empty
-            const testObjectClone = {...testObject};
-            testObjectClone[prop] = '';
-
-            // Post the new test object
-            const response = await request(app)
-            .post("/api/menuitems")
-            .set("Accept", "application/json")
-            .set("Content", "application/json")
-            .set("Authorization", "BEARER " + token)
-            .send(testObjectClone);
-
-            // Check the response
-            expect(response.status).toEqual(400);
-            expect(response.headers['content-type']).toMatch(/json/);
-            expect([
-                `\"${prop}\" is not allowed to be empty`,
-                `\"${prop}\" must be a number`
-            ]).toContain(response.body.message);
-        }
+        checkEmptyProps(testObject, "/api/menuitems", "post", token);
     });
 
     test("should not accept missing properties", async () =>{
-
-        // Check all properties
-        const properties = ["name", "price", "description", "image"]
-
-        for (const prop of properties){
-
-            // Make a copy of the test object and delete the tested property
-            const testObjectClone = {...testObject};
-            delete testObjectClone[prop];
-
-            // Post the new test object
-            const response = await request(app)
-            .post("/api/menuitems")
-            .set("Accept", "application/json")
-            .set("Content", "application/json")
-            .set("Authorization", "BEARER " + token)
-            .send(testObjectClone);
-
-            // Check the response
-            expect(response.status).toEqual(400);
-            expect(response.headers['content-type']).toMatch(/json/);
-            expect(response.body.message).toMatch(`\"${prop}\" is required`);
-        }
+        checkMissingProps(testObject, "/api/menuitems", "post", token);
     });
 
     test("should not allow posting without logging in", async () =>{

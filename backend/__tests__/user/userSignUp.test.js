@@ -30,9 +30,16 @@ describe("User signup", () => {
         expect(id).toBeTruthy();
         expect(token).toBeTruthy();
         expect(email).toEqual(testUser.email);
+
+        // Verify token
+        const decodedToken = jwt.verify(token, process.env.JWT_KEY);
+
+        expect(decodedToken.iat).toBeLessThan(Date.now() / 1000);
+        expect(decodedToken.exp).toBeGreaterThan(Date.now() / 1000);
+        expect(decodedToken.email).toEqual(testUser.email);
     });
 
-    test("should accept empty fields", async () =>{
+    test("should not accept empty fields", async () =>{
         const properties = ["name", "email", "password"]
         for (const prop of properties){
             const testUserClone = {...testUser};

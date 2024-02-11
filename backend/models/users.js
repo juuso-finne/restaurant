@@ -1,4 +1,4 @@
-const { execute } = require('../utilityFunctions');
+const { execute } = require('../utilityFunctions/dbUtilities');
 
 const users = {
     signUpUser: async (userObject) =>{
