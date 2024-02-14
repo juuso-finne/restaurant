@@ -23,7 +23,8 @@ describe("User login", () => {
         token: "",
         testObject: {
         }
-    }
+    };
+
     const {name, ...credentials} = testUser;
     testParameters.testObject = {...credentials};
 

@@ -2,15 +2,8 @@ const {describe, expect, test} = require("@jest/globals");
 const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
+const {getExistingId} = require("../../utilityFunctions/testUtilities");
 
-
-//Helper function for getting an existing item ID
-const getExistingId = async () =>{
-    const items = await request(app)
-        .get("/api/menuitems")
-        .set("Accept", "application/json");
-    return items.body[0].id;
-}
 
 describe("Menuitems DELETE", () => {
 

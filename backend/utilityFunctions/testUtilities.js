@@ -2,7 +2,7 @@ const {expect} = require("@jest/globals");
 const request = require("supertest");
 const app = require("../app");
 
-
+// // Function for checking the handling of empty properties in request objects
 const checkEmptyProps = async (testParameters) => {
 
     const {testObject} = {...testParameters}
@@ -25,6 +25,7 @@ const checkEmptyProps = async (testParameters) => {
     }
 }
 
+// Function for checking the handling of unwanted properties in request objects
 const checkExtraProps = async (testParameters) =>{
 
     // Add an unexpected property to the test object
@@ -39,7 +40,7 @@ const checkExtraProps = async (testParameters) =>{
     expect(response.body.message).toMatch("\"extraProperty\" is not allowed");
 }
 
-
+// Function for checking the handling of missing properties in request objects
 const checkMissingProps = async (testParameters) =>{
 
     const {testObject} = {...testParameters}
@@ -59,6 +60,16 @@ const checkMissingProps = async (testParameters) =>{
     }
 }
 
+// Function for getting an existing item ID from database
+const getExistingId = async () =>{
+
+    const items = await request(app)
+        .get("/api/menuitems")
+        .set("Accept", "application/json");
+    return items.body[0].id;
+}
+
+// Function to send an API request with json object payload
 const sendObjectToApi = (testParameters) => {
 
     const {testObject, endpoint, method, token} = testParameters;
@@ -76,5 +87,6 @@ module.exports = {
     checkEmptyProps,
     checkExtraProps,
     checkMissingProps,
+    getExistingId,
     sendObjectToApi
 }

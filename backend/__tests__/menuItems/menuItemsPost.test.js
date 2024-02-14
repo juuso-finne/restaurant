@@ -30,7 +30,7 @@ describe("Menuitems POST", () => {
             description: "Mansesta nääs",
             image: "tapola.jpg"
         }
-    }
+    };
 
     beforeAll(async () => {
 

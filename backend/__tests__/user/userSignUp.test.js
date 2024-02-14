@@ -3,6 +3,12 @@ const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
 const jwt = require('jsonwebtoken');
+const {
+    checkEmptyProps,
+    checkExtraProps,
+    checkMissingProps,
+    sendObjectToApi
+ } = require("../../utilityFunctions/testUtilities");
 
 
 describe("User signup", () => {
@@ -13,14 +19,17 @@ describe("User signup", () => {
         password: "testuser1234"
     }
 
+    const testParameters = {
+        method: "post",
+        endpoint: "/api/users/signup",
+        token: "",
+        testObject: testUser
+    };
+
     test("should create user account", async () =>{
 
         // Post new user data
-        const response = await request(app)
-            .post("/api/users/signup")
-            .set("Accept", "application/json")
-            .set("Content", "application/json")
-            .send(testUser);
+        const response = await sendObjectToApi(testParameters);
 
         const {id, token, email} = response.body;
 
@@ -40,55 +49,24 @@ describe("User signup", () => {
     });
 
     test("should not accept empty fields", async () =>{
-        const properties = ["name", "email", "password"]
-        for (const prop of properties){
-            const testUserClone = {...testUser};
-            testUserClone[prop] = "";
-
-            // Post new user data
-            const response = await request(app)
-            .post("/api/users/signup")
-            .set("Accept", "application/json")
-            .set("Content", "application/json")
-            .send(testUserClone);
-
-            // Check the response
-            expect(response.status).toEqual(400);
-            expect(response.headers['content-type']).toMatch(/json/);
-            expect(response.body.message).toMatch(`\"${prop}\" is not allowed to be empty`);
-        }
+        checkEmptyProps(testParameters);
     });
 
     test("should not accept missing fields", async () =>{
-        const properties = ["name", "email", "password"]
-        for (const prop of properties){
-            const testUserClone = {...testUser};
-            delete testUserClone[prop];
-
-            // Post new user data
-            const response = await request(app)
-            .post("/api/users/signup")
-            .set("Accept", "application/json")
-            .set("Content", "application/json")
-            .send(testUserClone);
-
-            // Check the response
-            expect(response.status).toEqual(400);
-            expect(response.headers['content-type']).toMatch(/json/);
-            expect(response.body.message).toMatch(`\"${prop}\" is required`);
-        }
+        checkMissingProps(testParameters);
     });
+
+    test("should not allow extra properties", async () =>{
+        checkExtraProps(testParameters);
+    });
+
 
     test("should validate e-mail address", async () =>{
 
         const testUserClone = {...testUser, email:"testuser.com"};
 
         // Post new user data
-        const response = await request(app)
-        .post("/api/users/signup")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(testUserClone);
+        const response = await sendObjectToApi({...testParameters, testObject: testUserClone});
 
         // Check the response
         expect(response.status).toEqual(400);
@@ -98,33 +76,13 @@ describe("User signup", () => {
 
     test("should not allow duplicate e-mails in db", async () =>{
 
-        // Post new user data
-        const response = await request(app)
-        .post("/api/users/signup")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(testUser);
+        // Try to signup with existing e-mail
+        const response = await sendObjectToApi(testParameters);
 
         // Check the response
         expect(response.status).toEqual(422);
         expect(response.headers['content-type']).toMatch(/json/);
         expect(response.body.message).toMatch("User already exists");
-    });
-
-    test("should not allow extra properties", async () =>{
-        const testUserClone = {...testUser, extraProperty:"Does not belong here"};
-
-        // Post new user data
-        const response = await request(app)
-        .post("/api/users/signup")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(testUserClone);
-
-        // Check the response
-        expect(response.status).toEqual(400);
-        expect(response.headers['content-type']).toMatch(/json/);
-        expect(response.body.message).toMatch("\"extraProperty\" is not allowed");
     });
 
     afterAll(async () => {
