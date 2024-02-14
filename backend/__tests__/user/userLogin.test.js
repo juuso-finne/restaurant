@@ -1,5 +1,10 @@
 const {describe, expect, test, beforeAll} = require("@jest/globals");
-const { checkEmptyProps, checkMissingProps } = require("../../utilityFunctions/testUtilities");
+const {
+    checkEmptyProps,
+    checkExtraProps,
+    checkMissingProps,
+    sendObjectToApi
+ } = require("../../utilityFunctions/testUtilities");
 const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
@@ -12,7 +17,15 @@ describe("User login", () => {
         password: "testuser1234"
     };
 
+    const testParameters = {
+        method: "post",
+        endpoint: "/api/users/login",
+        token: "",
+        testObject: {
+        }
+    }
     const {name, ...credentials} = testUser;
+    testParameters.testObject = {...credentials};
 
     beforeAll(async () => {
 
@@ -26,11 +39,7 @@ describe("User login", () => {
     test("should log the user in, given the correct email and password", async () =>{
 
         // Log in the test user
-        const response = await request(app)
-        .post("/api/users/login")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(credentials);
+        const response = await sendObjectToApi(testParameters);
 
         // Check the response
         const {id, email, token} = response.body
@@ -54,11 +63,7 @@ describe("User login", () => {
         const falseCredentials = {...credentials, password: "wrongPassword"};
 
         // Attempt login
-        const response = await request(app)
-        .post("/api/users/login")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(falseCredentials);
+        const response = await sendObjectToApi({...testParameters, testObject: falseCredentials});
 
         // Check the response
         expect(response.status).toEqual(401);
@@ -66,15 +71,11 @@ describe("User login", () => {
         expect(response.body.message).toMatch("Could not identify credentials");
     });
 
-    test("should not allow non-existetnt users in", async () =>{
+    test("should not allow non-existent users in", async () =>{
         const falseCredentials = {...credentials, email: "wrong@email.com"};
 
         // Attempt login
-        const response = await request(app)
-        .post("/api/users/login")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(falseCredentials);
+        const response = await sendObjectToApi({...testParameters, testObject: falseCredentials});
 
         // Check the response
         expect(response.status).toEqual(401);
@@ -83,31 +84,15 @@ describe("User login", () => {
     });
 
     test("should not accept empty properties", async () =>{
-        checkEmptyProps(credentials, "/api/users/login", "post");
+        checkEmptyProps(testParameters);
     });
 
     test("should not accept missing properties", async () =>{
-        checkMissingProps(credentials, "/api/users/login", "post");
+        checkMissingProps(testParameters);
     });
 
     test("should not allow extra properties", async () =>{
-        const falseCredentials = {
-            email: "john.wayne@hollywood.com",
-            password: "john123",
-            extraProperty: "hello"
-        }
-
-        // Attempt login
-        const response = await request(app)
-        .post("/api/users/login")
-        .set("Accept", "application/json")
-        .set("Content", "application/json")
-        .send(falseCredentials);
-
-        // Check the response
-        expect(response.status).toEqual(400);
-        expect(response.headers['content-type']).toMatch(/json/);
-        expect(response.body.message).toMatch("\"extraProperty\" is not allowed");
+        checkExtraProps(testParameters);
     });
 
     afterAll(async () => {
