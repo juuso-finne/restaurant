@@ -20,16 +20,18 @@ describe("Menuitems POST", () => {
         password: "testuser1234"
     };
 
+    const testObject = {
+        name: "Mustamakkara",
+        price: "7.50",
+        description: "Mansesta nääs",
+        image: "tapola.jpg"
+    }
+
     const testParameters = {
         method: "post",
         endpoint: "/api/menuitems",
         token: "",
-        testObject: {
-            name: "Mustamakkara",
-            price: "7.50",
-            description: "Mansesta nääs",
-            image: "tapola.jpg"
-        }
+        testObject
     };
 
     beforeAll(async () => {

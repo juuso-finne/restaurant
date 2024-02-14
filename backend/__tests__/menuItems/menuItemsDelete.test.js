@@ -2,15 +2,28 @@ const {describe, expect, test} = require("@jest/globals");
 const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
-const {getExistingId} = require("../../utilityFunctions/testUtilities");
+const {getExistingId, sendObjectToApi} = require("../../utilityFunctions/testUtilities");
 
 
 describe("Menuitems DELETE", () => {
+
+    const updateTestId = async () =>{
+        const newId = await getExistingId();
+        testParameters.endpoint = "/api/menuitems/" + newId;
+        return newId;
+    }
 
     const testUser = {
         name: "Test User",
         email: "test2@user.com",
         password: "testuser1234"
+    };
+
+    const testParameters = {
+        method: "delete",
+        endpoint: "/api/menuitems",
+        token: "",
+        testUser
     };
 
     let token = "";
@@ -23,43 +36,35 @@ describe("Menuitems DELETE", () => {
         .set("Accept", "application/json")
         .send(testUser);
 
-        token = response.body.token;
+        testParameters.token = response.body.token;
     });
 
     test("should delete the item from the database", async () => {
-        const testId = await getExistingId();
+        const id = await updateTestId();
         // Delete
-        const response = await request(app)
-            .delete(`/api/menuitems/${testId}`)
-            .set("Accept", "application/json")
-            .set("Authorization", "BEARER " + token)
+        const response = await sendObjectToApi(testParameters);
 
         // Check the response
         expect(response.status).toEqual(200);
         expect(response.headers['content-type']).toMatch(/json/);
-        expect(response.body.message).toMatch(`Item ${testId} deleted`);
+        expect(response.body.message).toMatch(`Item ${id} deleted`);
     });
 
     test("should return an error if the item is not found", async () => {
-        const testId = "NonExistentId";
-        // Delete
-        const response = await request(app)
-            .delete(`/api/menuitems/${testId}`)
-            .set("Accept", "application/json")
-            .set("Authorization", "BEARER " + token)
+
+        // Try to delete
+        const response = await sendObjectToApi({...testParameters, endpoint: "/api/menuitems/nonExistingId"})
 
         // Check the response
         expect(response.status).toEqual(404);
         expect(response.headers['content-type']).toMatch(/json/);
-        expect(response.body.message).toMatch(`Unable to find item ${testId}`);
+        expect(response.body.message).toMatch(`Unable to find item nonExistingId`);
     });
 
     test("should not delete the item if not logged in", async () => {
-        const testId = await getExistingId();
+        await updateTestId();
         // Delete
-        const response = await request(app)
-            .delete(`/api/menuitems/${testId}`)
-            .set("Accept", "application/json")
+        const response = await sendObjectToApi({...testParameters, token: ""});
 
         // Check the response
         expect(response.status).toEqual(401);

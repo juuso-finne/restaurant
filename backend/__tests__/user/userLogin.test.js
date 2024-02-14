@@ -21,8 +21,7 @@ describe("User login", () => {
         method: "post",
         endpoint: "/api/users/login",
         token: "",
-        testObject: {
-        }
+        testObject: testUser
     };
 
     const {name, ...credentials} = testUser;
