@@ -4,7 +4,6 @@ on:
   push:
     branches: ["main"]
 
-
 env:
   REGISTRY: ghcr.io
   BACKEND_IMAGE_NAME: tite-5g00ev16-3003/practice-project-backend-juuso-finne
