@@ -1,12 +1,12 @@
-GET http://localhost:5000/health
+GET {{server}}/health
 
 #########
 
-GET http://localhost:5000/api/menuitems
+GET {{server}}/api/menuitems
 
 ###############
 
-POST http://localhost:5000/api/menuitems
+POST {{server}}/api/menuitems
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
@@ -19,7 +19,7 @@ Authorization: BEARER {{authToken}}
 
 #############
 
-PUT http://localhost:5000/api/menuitems/d45
+PUT {{server}}/api/menuitems/d45
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
@@ -32,12 +32,12 @@ Authorization: BEARER {{authToken}}
 
 ####################
 
-DELETE http://localhost:5000/api/menuitems/d27
+DELETE {{server}}/api/menuitems/d27
 Authorization: BEARER {{authToken}}
 
 ########
 
-POST http://localhost:5000/api/users/signup
+POST {{server}}/api/users/signup
 Content-Type: application/json
 
 {
@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ######
 # @name login
-POST http://localhost:5000/api/users/login
+POST {{server}}/api/users/login
 Content-Type: application/json
 Authorization: BEARER
 
@@ -60,6 +60,7 @@ Authorization: BEARER
 ####
 
 @authToken = {{login.response.body.token}}
+@server = http://172.16.5.16:5502
 
 ######
 
