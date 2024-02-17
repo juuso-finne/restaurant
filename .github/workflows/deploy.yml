@@ -101,19 +101,19 @@ jobs:
 
       - name: Create and sync Container configs
         run: |
-          mkdir -p wk7_stack
-          cp docker-compose.server.yml wk7_stack/docker-compose.yml
-          mkdir -p wk7_stack/db/
-          cp db/init.prod.sql wk7_stack/db/
-          echo "${{ secrets.ENV_FILE_PROD }}" > wk7_stack/.env
-          echo "BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}" >> wk7_stack/.env
-          rsync -r wk7_stack "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:./"
+          mkdir -p final_project
+          cp docker-compose.server.yml final_project/docker-compose.yml
+          mkdir -p final_project/db/
+          cp db/init.prod.sql final_project/db/
+          echo "${{ secrets.ENV_FILE_PROD }}" > final_project/.env
+          echo "BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}" >> final_project/.env
+          rsync -r final_project "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:./"
 
       - name: Start the containers via ssh
         run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}
           "
           docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }};
-          cd wk7_stack;
+          cd final_project;
           docker-compose pull;
           docker-compose up -d
           "
