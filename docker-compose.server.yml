@@ -3,7 +3,7 @@ services:
   backend:
     image: ${BACKEND_IMAGE}
     ports:
-      - "5000:5000"
+      - "5502:5502"
     env_file:
       - .env
     restart: always
@@ -15,7 +15,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - '3306:3306'
+      - '3307:3307'
     volumes:
         - ./db/init.prod.sql:/docker-entrypoint-initdb.d/init.prod.sql
         - mysql_data:/var/lib/mysql
