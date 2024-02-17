@@ -1,0 +1,126 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+     - "main"
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE_NAME: tite-5g00ev16-3003/practice-project-backend-juuso-finne
+
+jobs:
+  build:
+    name: Build images
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Fetch code
+        uses: actions/checkout@v4.1.1
+
+      - name: Install Node
+        uses: actions/setup-node@v4.0.2
+
+        with:
+          node-version: "18"
+
+      - name: Set up QEmu
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+      - name: Build and Push the Backend Image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: "${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}"
+
+
+  # Workflow for deploying the containers on the server
+  deploy:
+    name: Server Deployment
+    timeout-minutes: 5
+    needs: build
+
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Fetch the code using the checkout action
+      - name: Fetch Code
+        uses: actions/checkout@v4.1.1
+
+      # Install OpenVPN to be able to connect to the VM server
+      - name: Install OpenVPN and RSync
+        run: |
+          sudo apt update
+          sudo apt --assume-yes --no-install-recommends install openvpn openvpn-systemd-resolved rsync
+
+      # Create OpenVPN configuration files
+      - name: Setup VPN config
+        run: |
+          echo "${{ secrets.VPN_PASSWORD }}" > secret.txt
+          echo "${{ secrets.VPN_CONFIG }}" > config.ovpn
+
+      # Start the VPN connection
+      - name: Connect VPN
+        run: sudo openvpn --config config.ovpn --daemon --log vpn.log
+
+      # Helper command to make sure the VPN connection is up before continueing
+      - name: Wait for a VPN connection
+        timeout-minutes: 1
+        run: until ping -c1 ${{ secrets.REMOTE_SERVER }}; do sleep 10; done
+
+      # Steps needed for getting SSH to connect
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.DEPLOY_KEY_PRIVATE }}" | base64 -d > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.REMOTE_SERVER }} >> ~/.ssh/known_hosts
+
+      - name: Create and sync Container configs
+        run: |
+          mkdir -p wk7_stack
+          cp docker-compose.server.yml wk7_stack/docker-compose.yml
+          mkdir -p wk7_stack/db/
+          cp db/init.prod.sql wk7_stack/db/
+          echo "${{ secrets.ENV_FILE_PROD }}" > wk7_stack/.env
+          echo "BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}" >> wk7_stack/.env
+          rsync -r wk7_stack "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:./"
+
+      - name: Start the containers via ssh
+        run: ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}
+          "
+          docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }};
+          cd wk7_stack;
+          docker-compose pull;
+          docker-compose up -d
+          "
+
+      # Close the VPN connection
+      - name: Kill VPN connection
+        if: always()
+        run: |
+          sudo chmod 777 vpn.log
+          sudo killall openvpn
