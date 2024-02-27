@@ -60,7 +60,7 @@ Authorization: BEARER
 ####
 
 @authToken = {{login.response.body.token}}
-@server = http://172.16.5.16:5502
-
+#@server = http://172.16.5.16:5502
+@server = http://localhost:5502
 ######
 
