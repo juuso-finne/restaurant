@@ -1,13 +1,32 @@
-import { useContext } from 'react';
 import MenuItem from "../components/MenuItem";
+import { useQuery } from 'react-query'
+import { useState, useEffect } from "react";
 import {Stack, Typography} from '@mui/material/';
 
 const ProductsList = () =>{
 
+    const [apiEnabled, setApiEnabled] = useState(true);
+
+    const {isLoading, error, data} = useQuery("menuItems", () =>{
+        return fetch('http://localhost:5502/api/menuitems')
+        .then((res) => res.json())
+    },
+    {enabled: apiEnabled}
+    );
+
+    // Prevent the page from making more API calls once the data is loaded
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            setApiEnabled(false);
+        }
+    }, [data]);
+
+
     const buildProductList = () =>{
         return(
             <ul style={{listStyleType: "none"}}>
-                {products.map((product) =>{
+                {data.map((product) =>{
                     return(<li key={product.id}>
                             <MenuItem product={product} />
                         </li>)
@@ -16,16 +35,12 @@ const ProductsList = () =>{
         )
     }
 
-    return(
-/*         <Stack alignItems="center">
+    return (
+        <Stack alignItems="center">
             <Typography variant='h2' component="h1">Menu</Typography>
-            {(!isLoading && !error) && buildProductList()}
-        </Stack> */
-        <>
-        <Typography variant='h2' component="h1">Menu</Typography>
-        <Typography variant='body1'>TBD</Typography>
-        </>
-    )
+            {(!isLoading && !error && buildProductList())}
+        </Stack>
+    );
 }
 
 export default ProductsList;

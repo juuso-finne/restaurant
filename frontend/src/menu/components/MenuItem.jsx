@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material/';
 import { useState } from 'react'
+// localhost:5502/${product.image}
 
 const MenuItem = ({product}) => {
     const [itemCount, setItemCount] = useState(0);
@@ -7,8 +8,8 @@ const MenuItem = ({product}) => {
     return (
         <Card style={{display: "flex", alignItems: "center",maxWidth: "100%", margin: "10px"}}>
           <CardMedia
-            component="img"
-            image={`localhost:5502/images/${product.image}`}
+            component='img'
+            image={`http://localhost:5502/${product.image}`}
             alt={product.name}
             style={{ objectFit: 'cover', width: '100px', height: '100px' }}
           />

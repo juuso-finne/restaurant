@@ -1,7 +1,10 @@
 const express = require('express');
-const app = express();
+const cors = require('cors');
+
 const menuRouter = require('./routes/menu');
 const usersRouter = require('./routes/users');
+
+const app = express();
 
 app.get('/health', (req, res) => {
     res.send("OK");
@@ -9,6 +12,12 @@ app.get('/health', (req, res) => {
 
 app.use(express.json());
 app.use(express.static('public'));
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://172.16.5.16:5173'
+  ]
+}));
 app.use('/api/menuitems', menuRouter);
 app.use('/api/users', usersRouter);
 
