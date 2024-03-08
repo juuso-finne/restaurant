@@ -4,7 +4,6 @@ import { loginContext } from '../../App';
 import LoginForm from '../components/LoginForm';
 import { useMutation } from "react-query"
 import { login } from '../API/users';
-import { convertLength } from '@mui/material/styles/cssUtils';
 
 const Auth = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(loginContext);
@@ -25,8 +24,7 @@ const Auth = () => {
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (response) => {
-            console.log(response)
-            if (response.ok) {
+            if (response.token) {
                 setIsLoggedIn(true);
             }
         },

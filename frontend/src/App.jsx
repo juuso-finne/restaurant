@@ -16,9 +16,9 @@ export const loginContext = createContext();
 
 
 function App() {
-  const [isLoggedIn, toggleIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   return (
-    <loginContext.Provider value={isLoggedIn}>
+    <loginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
       <QueryClientProvider client={queryClient}>
         <Router>
           <MainNavigation />

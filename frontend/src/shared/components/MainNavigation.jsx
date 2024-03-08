@@ -1,8 +1,11 @@
 import NavItem from './NavLink';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { Typography, Toolbar, Button } from '@mui/material';
+import { useContext } from 'react';
+import { loginContext } from '../../App';
 
 const MainNavigation = () => {
+    const { isLoggedIn, setIsLoggedIn } = useContext(loginContext);
     return (
         <header style={{ position: 'sticky', top: 0 }}>
             <Toolbar style={{
@@ -18,7 +21,16 @@ const MainNavigation = () => {
                         <NavItem text="Home" route="/" />
                         <NavItem text="Menu" route="/Menu" />
                         <NavItem text="Cart" route="/Cart" />
-                        <NavItem text="Log in/Sign up" route="/Auth" />
+                        {isLoggedIn ?
+                            <Button
+                                color="inherit"
+                                onClick={() => { setIsLoggedIn(false) }}
+                            >
+                                <Typography variant="h6">LOGOUT</Typography>
+                            </Button>
+                            :
+                            <NavItem text="Log in/Sign up" route="/Auth" />
+                        }
                     </ul>
                 </nav>
             </Toolbar>
