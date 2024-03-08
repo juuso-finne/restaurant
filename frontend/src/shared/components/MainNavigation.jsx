@@ -15,10 +15,10 @@ const MainNavigation = () => {
                 </Link>
                 <nav>
                     <ul className='list' style={{ listStyleType: 'none', padding: 0, margin: 0, display: 'flex' }}>
-                        <NavItem style={{ marginRight: '20px' }} text="Home" route="/" />
-                        <NavItem style={{ marginRight: '20px' }} text="Menu" route="/Menu" />
-                        <NavItem style={{ marginRight: '20px' }} text="Cart" route="/Cart" />
-                        <NavItem style={{ marginRight: '20px' }} text="Log in" route="/Auth" />
+                        <NavItem text="Home" route="/" />
+                        <NavItem text="Menu" route="/Menu" />
+                        <NavItem text="Cart" route="/Cart" />
+                        <NavItem text="Log in/Sign up" route="/Auth" />
                     </ul>
                 </nav>
             </Toolbar>

@@ -1,6 +1,5 @@
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material/';
 import { useState } from 'react'
-// localhost:5502/${product.image}
 
 const MenuItem = ({ product }) => {
   const [itemCount, setItemCount] = useState(0);

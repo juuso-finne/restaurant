@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { createContext, useState } from 'react'
 
 import Auth from './users/pages/Auth'
 import Cart from './cart/pages/Cart'
@@ -11,46 +12,50 @@ import Menu from './menu/pages/Menu'
 
 
 const queryClient = new QueryClient();
+export const loginContext = createContext();
 
 
 function App() {
+  const [isLoggedIn, toggleIsLoggedIn] = useState(false)
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <MainNavigation />
-        <main style={{ margin: 0, padding: 0 }}>
-          <Switch>
+    <loginContext.Provider value={isLoggedIn}>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <MainNavigation />
+          <main style={{ margin: 0, padding: 0 }}>
+            <Switch>
 
-            <Route path='/' exact>
-              <Home />
-            </Route>
+              <Route path='/' exact>
+                <Home />
+              </Route>
 
-            <Route path='/auth' exact>
-              <Auth />
-            </Route>
+              <Route path='/auth' exact>
+                <Auth />
+              </Route>
 
-            <Route path='/cart' exact>
-              <Cart />
-            </Route>
+              <Route path='/cart' exact>
+                <Cart />
+              </Route>
 
-            <Route path='/checkout' exact>
-              <Checkout />
-            </Route>
+              <Route path='/checkout' exact>
+                <Checkout />
+              </Route>
 
-            <Route path='/menu' exact>
-              <Menu />
-            </Route>
+              <Route path='/menu' exact>
+                <Menu />
+              </Route>
 
-            <Route path='/error' exact>
-              <ErrorPage />
-            </Route>
+              <Route path='/error' exact>
+                <ErrorPage />
+              </Route>
 
-            <Redirect to='/error' />
+              <Redirect to='/error' />
 
-          </Switch>
-        </main>
-      </Router>
-    </QueryClientProvider>
+            </Switch>
+          </main>
+        </Router>
+      </QueryClientProvider>
+    </loginContext.Provider>
   )
 }
 
