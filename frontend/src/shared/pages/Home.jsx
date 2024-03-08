@@ -1,8 +1,8 @@
-import {Container, Typography} from '@mui/material';
+import { Container, Typography, CircularProgress } from '@mui/material';
 
-const Home = () =>{
+const Home = () => {
 
-    return(
+    return (
         <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Typography variant='h2' component="h1">Welcome to React Diner!</Typography>
             <Typography>Main chef: Juuso Finne</Typography>
