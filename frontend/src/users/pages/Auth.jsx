@@ -9,9 +9,10 @@ import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Auth = () => {
     const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(loginContext);
-    const [headerText, setHeaderText] = useState('Log in')
-    const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up')
-    const [hasAccount, setHasAccount] = useState(true)
+    const [headerText, setHeaderText] = useState('Log in');
+    const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up');
+    const [hasAccount, setHasAccount] = useState(true);
+    const [errorText, setErrorText] = useState("");
 
     useEffect(() => {
         if (hasAccount) {
@@ -29,6 +30,9 @@ const Auth = () => {
             if (response.token) {
                 setUser(response.email);
                 setIsLoggedIn(true);
+                setErrorText("");
+            } else if (response.message) {
+                setErrorText(response.message);
             }
         },
         onError: (error) => console.log(error)
@@ -39,6 +43,10 @@ const Auth = () => {
         onSuccess: (response) => {
             if (response.token) {
                 setUser(response.email);
+                setIsLoggedIn(true);
+                setErrorText("");
+            } else if (response.message) {
+                setErrorText(response.message);
             }
         },
         onError: (error) => console.log(error)
@@ -63,10 +71,19 @@ const Auth = () => {
                         <SignUpForm submitHandler={signupHandler} />
                     }
 
+                    <Typography
+                        color="#FF0000"
+                        visibility={errorText.length === 0 ? "hidden" : "block"}
+                        variant='subtitle1'
+                    >
+                        {errorText}
+                    </Typography>
+
                     {/* Let the user choose login or signup:*/}
                     <Typography
                         onClick={() => {
                             setHasAccount(oldValue => !oldValue)
+                            setErrorText("");
                         }}
                         component="a" href='#'
                     >
