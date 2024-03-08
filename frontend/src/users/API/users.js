@@ -15,3 +15,21 @@ export const login = async ({ email, password }) => {
         console.log(error)
     }
 }
+
+export const signup = async ({ name, email, password }) => {
+    try {
+        const response = await fetch('http://localhost:5502/api/users/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                name, email, password
+            })
+        });
+        return await response.json();
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -2,8 +2,9 @@ import { Stack, Typography, } from '@mui/material/';
 import { useContext, useEffect, useState } from "react";
 import { loginContext } from '../../App';
 import LoginForm from '../components/LoginForm';
+import SignUpForm from '../components/SignUpForm';
 import { useMutation } from "react-query"
-import { login } from '../API/users';
+import { login, signup } from '../API/users';
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Auth = () => {
@@ -33,21 +34,47 @@ const Auth = () => {
         onError: (error) => console.log(error)
     })
 
+    const signupMutation = useMutation({
+        mutationFn: signup,
+        onSuccess: (response) => {
+            if (response.token) {
+                setUser(response.email);
+            }
+        },
+        onError: (error) => console.log(error)
+    })
+
     const loginHandler = (data) => {
         loginMutation.mutate(data);
+    }
+
+    const signupHandler = (data) => {
+        signupMutation.mutate(data)
     }
 
     return (
         <>
             {!isLoggedIn ?
+                // Not logged in:
                 <Stack alignItems="center">
                     <Typography variant='h2' component="h1">{headerText}</Typography>
-                    {!isLoggedIn && <LoginForm submitHandler={loginHandler} />}
-                    <a href='#' onClick={() => {
-                        setHasAccount(oldValue => !oldValue)
-                    }}><Typography>{bottomText}</Typography></a>
-                </Stack>
-                :
+                    {hasAccount ?
+                        <LoginForm submitHandler={loginHandler} /> :
+                        <SignUpForm submitHandler={signupHandler} />
+                    }
+
+                    {/* Let the user choose login or signup:*/}
+                    <Typography
+                        onClick={() => {
+                            setHasAccount(oldValue => !oldValue)
+                        }}
+                        component="a" href='#'
+                    >
+                        {bottomText}
+                    </Typography>
+                </Stack> :
+
+                // Logged in:
                 <Stack alignItems="center">
                     <Typography>Logged in as {user}</Typography>
                     <Typography component={NavLink} to='/'>Back to main page</Typography>
