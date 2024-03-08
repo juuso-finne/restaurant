@@ -1,9 +1,13 @@
 import { Stack, Typography, } from '@mui/material/';
 import { useContext, useEffect, useState } from "react";
 import { loginContext } from '../../App';
+import LoginForm from '../components/LoginForm';
+import { useMutation } from "react-query"
+import { login } from '../API/users';
+import { convertLength } from '@mui/material/styles/cssUtils';
 
 const Auth = () => {
-    const isLoggedIn = useContext(loginContext);
+    const { isLoggedIn, setIsLoggedIn } = useContext(loginContext);
     const [headerText, setHeaderText] = useState('Log in')
     const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up')
     const [hasAccount, setHasAccount] = useState(true)
@@ -18,9 +22,25 @@ const Auth = () => {
         }
     }, [hasAccount])
 
+    const loginMutation = useMutation({
+        mutationFn: login,
+        onSuccess: (response) => {
+            console.log(response)
+            if (response.ok) {
+                setIsLoggedIn(true);
+            }
+        },
+        onError: (error) => console.log(error)
+    })
+
+    const loginHandler = (data) => {
+        loginMutation.mutate(data);
+    }
+
     return (
         <Stack alignItems="center">
             <Typography variant='h2' component="h1">{headerText}</Typography>
+            {!isLoggedIn && <LoginForm submitHandler={loginHandler} />}
             <a href='#' onClick={() => {
                 setHasAccount(oldValue => !oldValue)
             }}><Typography>{bottomText}</Typography></a>
