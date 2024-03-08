@@ -6,6 +6,7 @@ import SignUpForm from '../components/SignUpForm';
 import { useMutation } from "react-query"
 import { login, signup } from '../API/users';
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
+import { CircularProgress } from '@mui/material/';
 
 const Auth = () => {
     const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(loginContext);
@@ -13,6 +14,7 @@ const Auth = () => {
     const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up');
     const [hasAccount, setHasAccount] = useState(true);
     const [errorText, setErrorText] = useState("");
+    // const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (hasAccount) {
@@ -34,8 +36,14 @@ const Auth = () => {
             } else if (response.message) {
                 setErrorText(response.message);
             }
+            //setIsLoading(false);
         },
-        onError: (error) => console.log(error)
+        onError: (error) => {
+            console.log(error);
+            setErrorText("Network or server error");
+            //setIsLoading(false);
+        }
+
     })
 
     const signupMutation = useMutation({
@@ -48,8 +56,14 @@ const Auth = () => {
             } else if (response.message) {
                 setErrorText(response.message);
             }
+
+            //setIsLoading(false);
         },
-        onError: (error) => console.log(error)
+        onError: (error) => {
+            console.log(error)
+            setErrorText("Network or server error");
+            //setIsLoading(false);
+        }
     })
 
     const loginHandler = (data) => {
@@ -71,6 +85,7 @@ const Auth = () => {
                         <SignUpForm submitHandler={signupHandler} />
                     }
 
+                    {/*Error text:*/}
                     <Typography
                         color="#FF0000"
                         visibility={errorText.length === 0 ? "hidden" : "block"}
@@ -78,6 +93,9 @@ const Auth = () => {
                     >
                         {errorText}
                     </Typography>
+
+                    {/* Loading icon */}
+                    {/* <CircularProgress style={{ visibility: isLoading ? 'block' : 'hidden' }} /> */}
 
                     {/* Let the user choose login or signup:*/}
                     <Typography
