@@ -7,9 +7,9 @@ const Menu = () => {
 
     const [apiEnabled, setApiEnabled] = useState(true);
 
-    const { isLoading, error, data } = useQuery("menuItems", () => {
-        return fetch(`http://localhost:5502/api/menuitems`)
-            .then((res) => res.json())
+    const { isLoading, error, data } = useQuery("menuItems", async () => {
+        const res = await fetch(`http://localhost:5502/api/menuitems`);
+        return await res.json();
     },
         { enabled: apiEnabled }
     );

@@ -4,7 +4,7 @@ import { loginContext } from '../../App';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
 import { useMutation } from "react-query"
-import { login, signup } from '../API/users';
+import { login, signup } from '../UsersAPI';
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 import { useHistory } from "react-router-dom";
 import { CircularProgress } from '@mui/material/';
