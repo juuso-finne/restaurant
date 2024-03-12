@@ -2,7 +2,7 @@ import NavItem from './NavLink';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { Typography, Toolbar, Button } from '@mui/material';
 import { useContext } from 'react';
-import { loginContext } from '../../App';
+import { loginContext } from '../../users/context/LoginContextProvider';
 
 const MainNavigation = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(loginContext);

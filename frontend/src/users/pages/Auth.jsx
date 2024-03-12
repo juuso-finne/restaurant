@@ -1,6 +1,6 @@
 import { Stack, Typography, } from '@mui/material/';
 import { useContext, useEffect, useState } from "react";
-import { loginContext } from '../../App';
+import { loginContext } from '../context/LoginContextProvider';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
 import { useMutation } from "react-query"
