@@ -15,6 +15,7 @@ const Auth = () => {
     const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up');
     const [hasAccount, setHasAccount] = useState(true);
     const [errorText, setErrorText] = useState("");
+    const history = useHistory();
 
     useEffect(() => {
         if (hasAccount) {
@@ -33,6 +34,7 @@ const Auth = () => {
                 setUser(response.email);
                 setIsLoggedIn(true);
                 setErrorText("");
+                history.push('/');
             } else if (response.message) {
                 setErrorText(response.message);
             }
@@ -51,11 +53,10 @@ const Auth = () => {
                 setUser(response.email);
                 setIsLoggedIn(true);
                 setErrorText("");
+                history.push('/');
             } else if (response.message) {
                 setErrorText(response.message);
             }
-
-
         },
         onError: (error) => {
             console.log(error)
@@ -64,49 +65,38 @@ const Auth = () => {
         }
     })
 
-
     return (
-        <>
-            {!isLoggedIn ?
-                // Not logged in:
-                <Stack alignItems="center">
-                    <Typography variant='h2' component="h1">{headerText}</Typography>
-                    {hasAccount ?
-                        <LoginForm submitHandler={data => loginMutation.mutate(data)} /> :
-                        <SignUpForm submitHandler={data => signupMutation.mutate(data)} />
-                    }
-
-                    {/*Error text:*/}
-                    <Typography
-                        color="#FF0000"
-                        visibility={errorText.length === 0 ? "hidden" : "block"}
-                        variant='subtitle1'
-                    >
-                        {errorText}
-                    </Typography>
-
-                    {/* Loading icon */}
-                    <CircularProgress style={{ visibility: (loginMutation.isLoading || signupMutation.isLoading) ? 'block' : 'hidden' }} />
-
-                    {/* Let the user choose login or signup:*/}
-                    <Typography
-                        onClick={() => {
-                            setHasAccount(oldValue => !oldValue)
-                            setErrorText("");
-                        }}
-                        component="a" href='#'
-                    >
-                        {bottomText}
-                    </Typography>
-                </Stack> :
-
-                // Logged in:
-                <Stack alignItems="center">
-                    <Typography>Logged in as {user}</Typography>
-                    <Typography component={NavLink} to='/'>Back to main page</Typography>
-                </Stack>
+        // Not logged in:
+        <Stack alignItems="center">
+            <Typography variant='h2' component="h1">{headerText}</Typography>
+            {hasAccount ?
+                <LoginForm submitHandler={data => loginMutation.mutate(data)} /> :
+                <SignUpForm submitHandler={data => signupMutation.mutate(data)} />
             }
-        </>
+
+            {/*Error text:*/}
+            <Typography
+                color="#FF0000"
+                visibility={errorText.length === 0 ? "hidden" : "block"}
+                variant='subtitle1'
+            >
+                {errorText}
+            </Typography>
+
+            {/* Loading icon */}
+            <CircularProgress style={{ visibility: (loginMutation.isLoading || signupMutation.isLoading) ? 'block' : 'hidden' }} />
+
+            {/* Let the user choose login or signup:*/}
+            <Typography
+                onClick={() => {
+                    setHasAccount(oldValue => !oldValue)
+                    setErrorText("");
+                }}
+                component="a" href='#'
+            >
+                {bottomText}
+            </Typography>
+        </Stack>
     )
 }
 
