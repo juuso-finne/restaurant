@@ -6,6 +6,7 @@ import SignUpForm from '../components/SignUpForm';
 import { useMutation } from "react-query"
 import { login, signup } from '../API/users';
 import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from "react-router-dom";
 import { CircularProgress } from '@mui/material/';
 
 const Auth = () => {
@@ -14,7 +15,6 @@ const Auth = () => {
     const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up');
     const [hasAccount, setHasAccount] = useState(true);
     const [errorText, setErrorText] = useState("");
-    // const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (hasAccount) {
@@ -36,12 +36,10 @@ const Auth = () => {
             } else if (response.message) {
                 setErrorText(response.message);
             }
-            //setIsLoading(false);
         },
         onError: (error) => {
             console.log(error);
             setErrorText("Network or server error");
-            //setIsLoading(false);
         }
 
     })
@@ -57,22 +55,15 @@ const Auth = () => {
                 setErrorText(response.message);
             }
 
-            //setIsLoading(false);
+
         },
         onError: (error) => {
             console.log(error)
             setErrorText("Network or server error");
-            //setIsLoading(false);
+
         }
     })
 
-    const loginHandler = (data) => {
-        loginMutation.mutate(data);
-    }
-
-    const signupHandler = (data) => {
-        signupMutation.mutate(data)
-    }
 
     return (
         <>
@@ -81,8 +72,8 @@ const Auth = () => {
                 <Stack alignItems="center">
                     <Typography variant='h2' component="h1">{headerText}</Typography>
                     {hasAccount ?
-                        <LoginForm submitHandler={loginHandler} /> :
-                        <SignUpForm submitHandler={signupHandler} />
+                        <LoginForm submitHandler={data => loginMutation.mutate(data)} /> :
+                        <SignUpForm submitHandler={data => signupMutation.mutate(data)} />
                     }
 
                     {/*Error text:*/}
@@ -95,7 +86,7 @@ const Auth = () => {
                     </Typography>
 
                     {/* Loading icon */}
-                    {/* <CircularProgress style={{ visibility: isLoading ? 'block' : 'hidden' }} /> */}
+                    <CircularProgress style={{ visibility: (loginMutation.isLoading || signupMutation.isLoading) ? 'block' : 'hidden' }} />
 
                     {/* Let the user choose login or signup:*/}
                     <Typography
