@@ -53,8 +53,8 @@ Content-Type: application/json
 Authorization: BEARER
 
 {
-    "email": "petter@pettersson.com",
-    "password": "pettersson1234"
+    "email": "test@user.com",
+    "password": "testtesttest"
 }
 
 ####

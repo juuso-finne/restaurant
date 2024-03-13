@@ -97,6 +97,7 @@ const loginUser = async (req, res) => {
             const token = createToken(identifiedUser);
 
             returnObject = {
+                name: identifiedUser.name,
                 id: identifiedUser.id,
                 email,
                 token

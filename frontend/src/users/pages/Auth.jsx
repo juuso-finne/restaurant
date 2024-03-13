@@ -5,7 +5,6 @@ import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
 import { useMutation } from "react-query"
 import { login, signup } from '../UsersAPI';
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 import { useHistory } from "react-router-dom";
 import { CircularProgress } from '@mui/material/';
 
@@ -31,7 +30,8 @@ const Auth = () => {
         mutationFn: login,
         onSuccess: (response) => {
             if (response.token) {
-                setUser(response.email);
+                const { id, name, email } = response;
+                setUser({ id, name, email });
                 setIsLoggedIn(true);
                 setErrorText("");
                 history.push('/');
