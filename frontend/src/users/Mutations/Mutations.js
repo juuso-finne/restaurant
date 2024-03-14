@@ -15,8 +15,7 @@ export const useLoginMutation = (setErrorText) => {
         mutationFn: login,
         onSuccess: (response) => {
             if (response.token) {
-                const { id, name, email } = response;
-                internalLogin({ id, name, email });
+                internalLogin({ ...response });
                 setErrorText("");
                 history.push('/');
             } else if (response.message) {
@@ -40,8 +39,7 @@ export const useSignUpMutation = (setErrorText) => {
         mutationFn: signup,
         onSuccess: (response) => {
             if (response.token) {
-                const { id, name, email } = response;
-                internalLogin({ id, name, email });
+                internalLogin({ ...response });
                 setErrorText("");
                 history.push('/');
             } else if (response.message) {

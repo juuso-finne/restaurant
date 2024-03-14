@@ -14,6 +14,7 @@ import Menu from '../../menu/pages/Menu'
 
 const Router = () => {
     const { isLoggedIn } = useContext(loginContext);
+
     return (
         <BrowserRouter>
             <MainNavigation />

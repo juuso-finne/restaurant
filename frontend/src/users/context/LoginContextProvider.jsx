@@ -1,4 +1,5 @@
-import { createContext, useCallback, useState } from 'react'
+import { convertLength } from '@mui/material/styles/cssUtils';
+import { createContext, useCallback, useState, useEffect } from 'react'
 
 export const loginContext = createContext();
 
@@ -20,6 +21,13 @@ const LoginContextProvider = ({ children }) => {
         setUser({});
         localStorage.removeItem('userData');
     }, []);
+
+    useEffect(() => {
+        const storedUserData = JSON.parse(localStorage.getItem('userData'));
+        if (storedUserData && storedUserData.token) {
+            internalLogin(storedUserData);
+        }
+    }, [internalLogin])
 
     return (
         <loginContext.Provider value={{
