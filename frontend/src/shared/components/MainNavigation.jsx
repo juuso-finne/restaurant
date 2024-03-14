@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import { loginContext } from '../../users/context/LoginContextProvider';
 
 const MainNavigation = () => {
-    const { isLoggedIn, setIsLoggedIn } = useContext(loginContext);
+    const { isLoggedIn, internalLogout, user } = useContext(loginContext);
     return (
         <header style={{ position: 'sticky', top: 0 }}>
             <Toolbar style={{
@@ -28,12 +28,14 @@ const MainNavigation = () => {
 
                         {
                             isLoggedIn ?
-                                <Button
-                                    color="inherit"
-                                    onClick={() => { setIsLoggedIn(false) }}
-                                >
-                                    <Typography variant="h6">LOGOUT</Typography>
-                                </Button>
+                                <>
+                                    <Button
+                                        color="inherit"
+                                        onClick={() => { internalLogout() }}
+                                    >
+                                        <Typography variant="h6">LOGOUT</Typography>
+                                    </Button>
+                                </>
                                 :
                                 <NavItem text="Log in/Sign up" route="/Auth" />
                         }

@@ -51,6 +51,7 @@ const signUpUser = async (req, res) => {
 
                 returnObject = {
                     id: newUser.id,
+                    name,
                     email,
                     token
                 };

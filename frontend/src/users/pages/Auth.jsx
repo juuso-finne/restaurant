@@ -29,15 +29,16 @@ const Auth = () => {
 
 
     return (
-        // Not logged in:
         <Stack alignItems="center">
             <Typography variant='h2' component="h1">{headerText}</Typography>
-            {hasAccount ?
-                <LoginForm submitHandler={data => loginMutation.mutate(data)} /> :
-                <SignUpForm submitHandler={data => signUpMutation.mutate(data)} />
+            {
+                hasAccount ?
+                    <LoginForm submitHandler={data => loginMutation.mutate(data)} />
+                    :
+                    <SignUpForm submitHandler={data => signUpMutation.mutate(data)} />
             }
 
-            {/*Error text:*/}
+            {/*Error text TODO: Make own component*/}
             <Typography
                 color="#FF0000"
                 visibility={errorText.length === 0 ? "hidden" : "block"}
@@ -49,7 +50,7 @@ const Auth = () => {
             {/* Loading icon */}
             <CircularProgress style={{ visibility: (loginMutation.isLoading || signUpMutation.isLoading) ? 'block' : 'hidden' }} />
 
-            {/* Let the user choose login or signup:*/}
+            {/* Let the user toggle between login and signup TODO: Make own component*/}
             <Typography
                 onClick={() => {
                     setHasAccount(oldValue => !oldValue)
@@ -59,6 +60,7 @@ const Auth = () => {
             >
                 {bottomText}
             </Typography>
+
         </Stack>
     )
 }

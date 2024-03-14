@@ -7,7 +7,8 @@ import { useMutation } from "react-query"
 
 
 export const useLoginMutation = (setErrorText) => {
-    const { setIsLoggedIn, setUser } = useContext(loginContext);
+
+    const { internalLogin } = useContext(loginContext);
     const history = useHistory();
 
     return useMutation({
@@ -15,8 +16,7 @@ export const useLoginMutation = (setErrorText) => {
         onSuccess: (response) => {
             if (response.token) {
                 const { id, name, email } = response;
-                setUser({ id, name, email });
-                setIsLoggedIn(true);
+                internalLogin({ id, name, email });
                 setErrorText("");
                 history.push('/');
             } else if (response.message) {
@@ -32,15 +32,16 @@ export const useLoginMutation = (setErrorText) => {
 }
 
 export const useSignUpMutation = (setErrorText) => {
-    const { setIsLoggedIn, setUser } = useContext(loginContext);
+
+    const { internalLogin } = useContext(loginContext);
     const history = useHistory();
 
     return useMutation({
         mutationFn: signup,
         onSuccess: (response) => {
             if (response.token) {
-                setUser(response.email);
-                setIsLoggedIn(true);
+                const { id, name, email } = response;
+                internalLogin({ id, name, email });
                 setErrorText("");
                 history.push('/');
             } else if (response.message) {
