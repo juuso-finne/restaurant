@@ -1,4 +1,6 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
+import { loginContext } from '../../users/context/LoginContextProvider'
+import { useContext } from 'react'
 
 import Auth from '../../users/pages/Auth'
 import Cart from '../../cart/pages/Cart'
@@ -9,7 +11,9 @@ import MainNavigation from './MainNavigation'
 import Menu from '../../menu/pages/Menu'
 
 
+
 const Router = () => {
+    const { isLoggedIn } = useContext(loginContext);
     return (
         <BrowserRouter>
             <MainNavigation />
@@ -20,17 +24,26 @@ const Router = () => {
                         <Home />
                     </Route>
 
-                    <Route path='/auth' exact>
-                        <Auth />
-                    </Route>
+                    {
+                        !isLoggedIn &&
+                        <Route path='/auth' exact>
+                            <Auth />
+                        </Route>
+                    }
 
-                    <Route path='/cart' exact>
-                        <Cart />
-                    </Route>
+                    {
+                        isLoggedIn &&
+                        <Route path='/cart' exact>
+                            <Cart />
+                        </Route>
+                    }
 
-                    <Route path='/checkout' exact>
-                        <Checkout />
-                    </Route>
+                    {
+                        isLoggedIn &&
+                        <Route path='/checkout' exact>
+                            <Checkout />
+                        </Route>
+                    }
 
                     <Route path='/menu' exact>
                         <Menu />
