@@ -32,6 +32,7 @@ const LoginContextProvider = ({ children }) => {
     const internalLogout = useCallback(() => {
         // TODO: Find out why the localStorage items
         // are not removed when function is called via timeout
+        localStorage.removeItem('cart');
         localStorage.removeItem('userData');
         localStorage.removeItem('tokenExpiration');
         setIsLoggedIn(false);

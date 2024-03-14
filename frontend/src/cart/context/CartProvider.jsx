@@ -5,16 +5,24 @@ export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
 
-    const { user } = useContext(loginContext);
-    const [cart, setCart] = useState({ userId: "", items: [] });
+    const { user, isLoggedIn } = useContext(loginContext);
+    const defaultCart = { userId: "", items: [] }
+
+    const [cart, setCart] = useState({ ...defaultCart });
     const [localCart, setLocalCart] = useState(() => {
-        const storedCart = localStorage.getItem('cart');
-        return storedCart ? JSON.parse(storedCart) : { userId: "", items: [] }
+        const storedCart = JSON.parse(localStorage.getItem('cart'));
+        return storedCart ? storedCart : { ...defaultCart }
     })
 
     useEffect(() => {
-        setCart(localCart);
-    }, []);
+        if (isLoggedIn) {
+            if (user.id === localCart.userId) {
+                setCart(localCart);
+            } else {
+                setCart(() => ({ ...defaultCart, userId: user.id }));
+            }
+        }
+    }, [isLoggedIn]);
 
 
     useEffect(() => {
