@@ -8,8 +8,7 @@ const MenuItem = ({ product }) => {
 
   const { incrementItem, getItemQuantity, cart } = useContext(CartContext);
   const [itemCount, setItemCount] = useState(getItemQuantity(product.id));
-  const { id, name, price } = product;
-  const shortProduct = { id, name, price };
+
 
   useEffect(() => {
     setItemCount(getItemQuantity(product.id))
@@ -31,7 +30,7 @@ const MenuItem = ({ product }) => {
 
         {useContext(loginContext).isLoggedIn &&
           <>
-            <Button variant="contained" onClick={() => incrementItem(shortProduct)}
+            <Button variant="contained" onClick={() => incrementItem(product)}
               style={{ position: 'static', zIndex: 0 }}
             >
               Add to cart

@@ -18,6 +18,13 @@ const loginInfoSchema = Joi.object({
     password: Joi.string().required()
 });
 
+const cartItem = Joi.object({
+    name: Joi.string().max(60).required(),
+    price: Joi.number().min(0.01).required(),
+    image: Joi.string().max(100).required(),
+
+});
+
 module.exports = {
     loginInfoSchema,
     menuItemSchema,

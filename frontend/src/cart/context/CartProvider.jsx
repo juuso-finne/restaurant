@@ -58,14 +58,16 @@ const CartProvider = ({ children }) => {
 
     // Increase the quantity of a given item by 1
     const incrementItem = (item) => {
+        const { id, name, price } = item;
+        const newItem = { id, name, price };
         const itemQuantity = getItemQuantity(item.id)
         if (itemQuantity === 0) {
-            setCart((oldCart) => ({ ...oldCart, items: [...oldCart.items, { ...item, quantity: 1 }] }));
+            setCart((oldCart) => ({ ...oldCart, items: [...oldCart.items, { ...newItem, quantity: 1 }] }));
         }
         else {
             setCart((oldCart) => ({
                 ...oldCart, items: oldCart.items.map((item) => {
-                    if (item.id === item.id)
+                    if (item.id === newItem.id)
                         return { ...item, quantity: item.quantity + 1 };
                     else
                         return item;
