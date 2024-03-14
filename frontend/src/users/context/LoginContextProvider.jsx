@@ -1,6 +1,6 @@
 import { createContext, useCallback, useState, useEffect } from 'react'
 import { DateTime, Interval, Duration } from 'luxon'
-import { useHistory } from 'react-router-dom';
+
 
 export const loginContext = createContext();
 let logoutTimer;
@@ -9,9 +9,8 @@ const tokenValidityTime = Duration.fromObject({
 })
 
 const LoginContextProvider = ({ children }) => {
-    const history = useHistory()
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [user, setUser] = useState({})
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState({});
     const [tokenExpiration, setTokenExpiration] = useState(DateTime.invalid("Not initalized"));
 
     const internalLogin = useCallback((userData, expiration = DateTime.now().plus(tokenValidityTime)) => {
@@ -34,12 +33,10 @@ const LoginContextProvider = ({ children }) => {
     const internalLogout = useCallback(() => {
         // TODO: Find out why the localStorage items
         // are not removed when function is called via timeout
-        localStorage.removeItem('cart');
         localStorage.removeItem('userData');
         localStorage.removeItem('tokenExpiration');
         setIsLoggedIn(false);
         setUser({});
-        history.push('/');
     }, []);
 
     useEffect(() => {

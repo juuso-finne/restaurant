@@ -9,15 +9,12 @@ const CartProvider = ({ children }) => {
     const defaultCart = { userId: "", items: [] }
 
     const [cart, setCart] = useState({ ...defaultCart });
-    const [localCart, setLocalCart] = useState(() => {
-        const storedCart = JSON.parse(localStorage.getItem('cart'));
-        return storedCart ? storedCart : { ...defaultCart }
-    })
 
     useEffect(() => {
         if (isLoggedIn) {
-            if (user.id === localCart.userId) {
-                setCart(localCart);
+            const storedCart = JSON.parse(localStorage.getItem('cart'))
+            if (storedCart && user.id === storedCart.userId) {
+                setCart(storedCart);
             } else {
                 setCart(() => ({ ...defaultCart, userId: user.id }));
             }
@@ -26,7 +23,9 @@ const CartProvider = ({ children }) => {
 
 
     useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cart));
+        if (isLoggedIn) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
     }, [cart])
 
     // Return the amount of a given item in cart

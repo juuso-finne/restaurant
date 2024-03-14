@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { Typography, Toolbar, Button } from '@mui/material';
 import { useContext } from 'react';
 import { loginContext } from '../../users/context/LoginContextProvider';
+import { useHistory } from 'react-router-dom/';
 
 const MainNavigation = () => {
     const { isLoggedIn, internalLogout, user } = useContext(loginContext);
+    const history = useHistory()
     return (
         <header style={{ position: 'sticky', top: 0, zIndex: 99 }}>
             <Toolbar style={{
@@ -31,7 +33,10 @@ const MainNavigation = () => {
                                 <>
                                     <Button
                                         color="inherit"
-                                        onClick={() => { internalLogout() }}
+                                        onClick={() => {
+                                            history.push('/');
+                                            internalLogout();
+                                        }}
                                     >
                                         <Typography variant="h6">LOGOUT</Typography>
                                     </Button>
