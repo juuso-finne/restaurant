@@ -1,4 +1,6 @@
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material/';
+import { useContext } from 'react';
+import { loginContext } from '../../users/context/LoginContextProvider';
 import { useState } from 'react'
 
 const MenuItem = ({ product }) => {
@@ -16,12 +18,19 @@ const MenuItem = ({ product }) => {
         <Typography variant="h5" component="div">
           {product.name}, {product.price} €
         </Typography>
-        <Button variant="contained" onClick={() => setItemCount(itemCount + 1)}
-          style={{ position: 'static', zIndex: 0 }}
-        >
-          Add to cart
-        </Button>
-        {itemCount > 0 && <Typography variant="subtitle2">In cart: {itemCount}</Typography>}
+
+
+        {useContext(loginContext).isLoggedIn &&
+          <>
+            <Button variant="contained" onClick={() => setItemCount(itemCount + 1)}
+              style={{ position: 'static', zIndex: 0 }}
+            >
+              Add to cart
+            </Button>
+
+            {itemCount > 0 && <Typography variant="subtitle2">In cart: {itemCount}</Typography>}
+          </>
+        }
         <Typography variant="subtitle1">{product.description}</Typography>
       </CardContent>
     </Card>
