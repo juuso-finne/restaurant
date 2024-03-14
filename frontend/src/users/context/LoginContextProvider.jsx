@@ -19,7 +19,6 @@ const LoginContextProvider = ({ children }) => {
         }
         setIsLoggedIn(true);
         setUser({ ...userData });
-        console.log("Writing to localStorage")
         localStorage.setItem(
             'userData',
             JSON.stringify(userData)
@@ -56,11 +55,9 @@ const LoginContextProvider = ({ children }) => {
     }, [internalLogin])
 
     useEffect(() => {
-        console.log(user)
-        console.log(tokenExpiration.isValid)
         if (user && tokenExpiration.isValid) {
             const timeRemaining = tokenExpiration.diffNow.toMillis()
-            console.log(timeRemaining);
+
             logoutTimer = setTimeout(internalLogout, timeRemaining)
         } else {
             clearTimeout(logoutTimer);

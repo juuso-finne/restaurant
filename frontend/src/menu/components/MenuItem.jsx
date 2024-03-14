@@ -1,10 +1,19 @@
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material/';
-import { useContext } from 'react';
 import { loginContext } from '../../users/context/LoginContextProvider';
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
+
+import { CartContext } from '../../cart/context/CartProvider';
 
 const MenuItem = ({ product }) => {
-  const [itemCount, setItemCount] = useState(0);
+
+  const { incrementItem, getItemQuantity, cart } = useContext(CartContext);
+  const [itemCount, setItemCount] = useState(getItemQuantity(product.id));
+  const { id, name, price } = product;
+  const shortProduct = { id, name, price };
+
+  useEffect(() => {
+    setItemCount(getItemQuantity(product.id))
+  }, [cart]);
 
   return (
     <Card style={{ display: "flex", alignItems: "center", maxWidth: "100%", margin: "10px" }}>
@@ -22,7 +31,7 @@ const MenuItem = ({ product }) => {
 
         {useContext(loginContext).isLoggedIn &&
           <>
-            <Button variant="contained" onClick={() => setItemCount(itemCount + 1)}
+            <Button variant="contained" onClick={() => incrementItem(shortProduct)}
               style={{ position: 'static', zIndex: 0 }}
             >
               Add to cart

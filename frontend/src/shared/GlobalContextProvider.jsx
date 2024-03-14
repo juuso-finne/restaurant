@@ -1,11 +1,14 @@
 // This provider is meant to encapsulate all other context providers
 
 import LoginContextProvider from '../users/context/LoginContextProvider';
+import CartProvider from '../cart/context/CartProvider';
 
 const GlobalContextProvider = ({ children }) => {
     return (
         <LoginContextProvider>
-            {children}
+            <CartProvider>
+                {children}
+            </CartProvider>
         </LoginContextProvider>
     )
 }

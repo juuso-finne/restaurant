@@ -27,9 +27,11 @@ const Menu = () => {
         return (
             <ul style={{ listStyleType: "none" }}>
                 {data.map((product) => {
-                    return (<li key={product.id}>
-                        <MenuItem product={product} />
-                    </li>)
+                    return (
+                        <li key={product.id}>
+                            <MenuItem product={product} />
+                        </li>
+                    )
                 })}
             </ul>
         )
