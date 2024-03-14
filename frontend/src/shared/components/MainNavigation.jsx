@@ -20,16 +20,22 @@ const MainNavigation = () => {
                     <ul className='list' style={{ listStyleType: 'none', padding: 0, margin: 0, display: 'flex' }}>
                         <NavItem text="Home" route="/" />
                         <NavItem text="Menu" route="/Menu" />
-                        <NavItem text="Cart" route="/Cart" />
-                        {isLoggedIn ?
-                            <Button
-                                color="inherit"
-                                onClick={() => { setIsLoggedIn(false) }}
-                            >
-                                <Typography variant="h6">LOGOUT</Typography>
-                            </Button>
-                            :
-                            <NavItem text="Log in/Sign up" route="/Auth" />
+
+                        {
+                            isLoggedIn &&
+                            <NavItem text="Cart" route="/Cart" />
+                        }
+
+                        {
+                            isLoggedIn ?
+                                <Button
+                                    color="inherit"
+                                    onClick={() => { setIsLoggedIn(false) }}
+                                >
+                                    <Typography variant="h6">LOGOUT</Typography>
+                                </Button>
+                                :
+                                <NavItem text="Log in/Sign up" route="/Auth" />
                         }
                     </ul>
                 </nav>
