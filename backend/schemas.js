@@ -36,7 +36,7 @@ const contactInfo = Joi.object({
 const orderInfoSchema = Joi.object({
     customerId: Joi.string().required(),
     customer: contactInfo,
-    items: Joi.array().items(cartItem)
+    items: Joi.array().items(cartItem.required())
 })
 
 module.exports = {

@@ -3,11 +3,12 @@ const cors = require('cors');
 
 const menuRouter = require('./routes/menu');
 const usersRouter = require('./routes/users');
+const ordersRouter = require('./routes/orders');
 
 const app = express();
 
 app.get('/health', (req, res) => {
-    res.send("OK");
+  res.send("OK");
 });
 
 app.use(express.json());
@@ -20,11 +21,12 @@ app.use(cors({
 }));
 app.use('/api/menuitems', menuRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/orders', ordersRouter);
 
 // Default route
 app.get('*', (req, res) => {
-    res.status(404).json({message: 'NOT FOUND'});
-  });
+  res.status(404).json({ message: 'NOT FOUND' });
+});
 
 
 module.exports = app;
