@@ -1,5 +1,6 @@
 import { createContext, useCallback, useState, useEffect } from 'react'
 import { DateTime, Interval, Duration } from 'luxon'
+import { useHistory } from 'react-router-dom';
 
 export const loginContext = createContext();
 let logoutTimer;
@@ -8,6 +9,7 @@ const tokenValidityTime = Duration.fromObject({
 })
 
 const LoginContextProvider = ({ children }) => {
+    const history = useHistory()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [user, setUser] = useState({})
     const [tokenExpiration, setTokenExpiration] = useState(DateTime.invalid("Not initalized"));
@@ -37,6 +39,7 @@ const LoginContextProvider = ({ children }) => {
         localStorage.removeItem('tokenExpiration');
         setIsLoggedIn(false);
         setUser({});
+        history.push('/');
     }, []);
 
     useEffect(() => {

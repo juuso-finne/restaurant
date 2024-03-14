@@ -7,7 +7,7 @@ import { loginContext } from '../../users/context/LoginContextProvider';
 const MainNavigation = () => {
     const { isLoggedIn, internalLogout, user } = useContext(loginContext);
     return (
-        <header style={{ position: 'sticky', top: 0 }}>
+        <header style={{ position: 'sticky', top: 0, zIndex: 99 }}>
             <Toolbar style={{
                 display: 'flex', flexDirection: 'row', alignItems: 'center',
                 justifyContent: 'center', zIndex: 10, backgroundColor: 'white',

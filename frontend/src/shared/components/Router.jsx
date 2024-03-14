@@ -1,6 +1,7 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import { loginContext } from '../../users/context/LoginContextProvider'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { CircularProgress } from '@mui/material'
 
 import Auth from '../../users/pages/Auth'
 import Cart from '../../cart/pages/Cart'
@@ -14,6 +15,22 @@ import Menu from '../../menu/pages/Menu'
 
 const Router = () => {
     const { isLoggedIn } = useContext(loginContext);
+
+
+    const [loading, setLoading] = useState(true);
+    // Introducing a delay to let isLoggedIn to get set properly
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            setLoading(false);
+            clearTimeout(delay);
+        }, 50);
+
+        return () => clearTimeout(delay);
+    }, []);
+
+    if (loading) {
+        return <CircularProgress />;
+    }
 
     return (
         <BrowserRouter>

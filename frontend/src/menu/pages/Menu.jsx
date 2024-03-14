@@ -3,6 +3,8 @@ import { useQuery } from 'react-query'
 import { useState, useEffect } from "react";
 import { Stack, Typography } from '@mui/material/';
 
+// TODO: Remove/Fix button effects
+
 const Menu = () => {
 
     const [apiEnabled, setApiEnabled] = useState(true);
