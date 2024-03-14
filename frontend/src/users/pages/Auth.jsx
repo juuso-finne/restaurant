@@ -1,20 +1,18 @@
 import { Stack, Typography, } from '@mui/material/';
-import { useContext, useEffect, useState } from "react";
-import { loginContext } from '../context/LoginContextProvider';
+import { useEffect, useState } from "react";
+import { CircularProgress } from '@mui/material/';
+import { useLoginMutation, useSignUpMutation } from '../Mutations/Mutations';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
-import { useMutation } from "react-query"
-import { login, signup } from '../UsersAPI';
-import { useHistory } from "react-router-dom";
-import { CircularProgress } from '@mui/material/';
+
+
 
 const Auth = () => {
-    const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(loginContext);
     const [headerText, setHeaderText] = useState('Log in');
     const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up');
     const [hasAccount, setHasAccount] = useState(true);
     const [errorText, setErrorText] = useState("");
-    const history = useHistory();
+
 
     useEffect(() => {
         if (hasAccount) {
@@ -26,44 +24,9 @@ const Auth = () => {
         }
     }, [hasAccount])
 
-    const loginMutation = useMutation({
-        mutationFn: login,
-        onSuccess: (response) => {
-            if (response.token) {
-                const { id, name, email } = response;
-                setUser({ id, name, email });
-                setIsLoggedIn(true);
-                setErrorText("");
-                history.push('/');
-            } else if (response.message) {
-                setErrorText(response.message);
-            }
-        },
-        onError: (error) => {
-            console.log(error);
-            setErrorText("Network or server error");
-        }
+    const loginMutation = useLoginMutation(setErrorText);
+    const signUpMutation = useSignUpMutation(setErrorText);
 
-    })
-
-    const signupMutation = useMutation({
-        mutationFn: signup,
-        onSuccess: (response) => {
-            if (response.token) {
-                setUser(response.email);
-                setIsLoggedIn(true);
-                setErrorText("");
-                history.push('/');
-            } else if (response.message) {
-                setErrorText(response.message);
-            }
-        },
-        onError: (error) => {
-            console.log(error)
-            setErrorText("Network or server error");
-
-        }
-    })
 
     return (
         // Not logged in:
@@ -71,7 +34,7 @@ const Auth = () => {
             <Typography variant='h2' component="h1">{headerText}</Typography>
             {hasAccount ?
                 <LoginForm submitHandler={data => loginMutation.mutate(data)} /> :
-                <SignUpForm submitHandler={data => signupMutation.mutate(data)} />
+                <SignUpForm submitHandler={data => signUpMutation.mutate(data)} />
             }
 
             {/*Error text:*/}
@@ -84,7 +47,7 @@ const Auth = () => {
             </Typography>
 
             {/* Loading icon */}
-            <CircularProgress style={{ visibility: (loginMutation.isLoading || signupMutation.isLoading) ? 'block' : 'hidden' }} />
+            <CircularProgress style={{ visibility: (loginMutation.isLoading || signUpMutation.isLoading) ? 'block' : 'hidden' }} />
 
             {/* Let the user choose login or signup:*/}
             <Typography
