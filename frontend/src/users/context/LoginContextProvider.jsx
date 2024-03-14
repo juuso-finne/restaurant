@@ -1,33 +1,71 @@
-import { convertLength } from '@mui/material/styles/cssUtils';
 import { createContext, useCallback, useState, useEffect } from 'react'
+import { DateTime, Interval, Duration } from 'luxon'
 
 export const loginContext = createContext();
+let logoutTimer;
+const tokenValidityTime = Duration.fromObject({
+    hours: 1
+})
 
 const LoginContextProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [user, setUser] = useState({})
+    const [tokenExpiration, setTokenExpiration] = useState(DateTime.invalid("Not initalized"));
 
-    const internalLogin = useCallback((user) => {
+    const internalLogin = useCallback((userData, expiration = DateTime.now().plus(tokenValidityTime)) => {
+
+        if (tokenExpiration.isValid) {
+            setTokenExpiration(expiration)
+        }
         setIsLoggedIn(true);
-        setUser({ ...user });
+        setUser({ ...userData });
+        console.log("Writing to localStorage")
         localStorage.setItem(
             'userData',
-            JSON.stringify(user)
+            JSON.stringify(userData)
+        );
+        localStorage.setItem(
+            'tokenExpiration',
+            expiration.toISO()
         );
     }, []);
 
     const internalLogout = useCallback(() => {
+        // TODO: Find out why the localStorage items
+        // are not removed when function is called via timeout
+        localStorage.removeItem('userData');
+        localStorage.removeItem('tokenExpiration');
         setIsLoggedIn(false);
         setUser({});
-        localStorage.removeItem('userData');
     }, []);
 
     useEffect(() => {
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
-        if (storedUserData && storedUserData.token) {
-            internalLogin(storedUserData);
+        const storedExpiration = localStorage.getItem('tokenExpiration');
+        let tokenInterval = Interval.invalid("Not initialized");
+        let expiration = DateTime.invalid("Not initialized");
+
+        if (!!storedExpiration) {
+            expiration = DateTime.fromISO(storedExpiration);
+            tokenInterval = Interval.fromDateTimes(DateTime.now(), expiration)
+        }
+
+        if (storedUserData && tokenInterval.isValid && expiration.isValid) {
+            internalLogin(storedUserData, expiration);
         }
     }, [internalLogin])
+
+    useEffect(() => {
+        console.log(user)
+        console.log(tokenExpiration.isValid)
+        if (user && tokenExpiration.isValid) {
+            const timeRemaining = tokenExpiration.diffNow.toMillis()
+            console.log(timeRemaining);
+            logoutTimer = setTimeout(internalLogout, timeRemaining)
+        } else {
+            clearTimeout(logoutTimer);
+        }
+    }, [internalLogout, user, tokenExpiration])
 
     return (
         <loginContext.Provider value={{
