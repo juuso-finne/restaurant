@@ -21,8 +21,8 @@ const loginInfoSchema = Joi.object({
 const cartItem = Joi.object({
     name: Joi.string().max(60).required(),
     price: Joi.number().min(0.01).required(),
-    image: Joi.string().max(100).required(),
-    quantity: Joi.number().min(1).required()
+    quantity: Joi.number().min(1).required(),
+    id: Joi.string()
 });
 
 const contactInfo = Joi.object({

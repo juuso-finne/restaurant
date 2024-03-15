@@ -3,6 +3,7 @@ import { loginContext } from '../../users/context/LoginContextProvider'
 import { useContext, useEffect, useState } from 'react'
 import { CircularProgress } from '@mui/material'
 
+
 import Auth from '../../users/pages/Auth'
 import Cart from '../../cart/pages/Cart'
 import Checkout from '../../checkout/pages/Checkout'

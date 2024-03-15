@@ -51,16 +51,16 @@ const Cart = () => {
     }
 
     return (
-        <>
+        <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Typography variant='h2' component="h1" style={{ textAlign: "center" }}>Cart</Typography>
             {cart.items.length > 0 ? buildTable() :
                 <>
-                    <p>Your shopping cart is empty</p>
-                    <p><Link style={{ color: "blue" }} to='/Menu'>Back to Menu</Link></p>
+                    <Typography>Your shopping cart is empty</Typography>
+                    <Typography><Link style={{ color: "blue" }} to='/Menu'>Back to Menu</Link></Typography>
                 </>
             }
 
-        </>)
+        </Container>)
 }
 
 export default Cart;

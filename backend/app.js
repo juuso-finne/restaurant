@@ -13,12 +13,12 @@ app.get('/health', (req, res) => {
 
 app.use(express.json());
 app.use(express.static('public'));
-app.use(cors({
+app.use(cors(/* {
   origin: [
-    'http://localhost:5173',
-    'http://172.16.5.16:5173'
+    'http://localhost:5173/',
+    'http://172.16.5.16:5173/'
   ]
-}));
+} */));
 app.use('/api/menuitems', menuRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/orders', ordersRouter);
