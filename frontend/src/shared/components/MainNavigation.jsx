@@ -2,12 +2,14 @@ import NavItem from './NavLink';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { Typography, Toolbar, Button } from '@mui/material';
 import { useContext } from 'react';
-import { loginContext } from '../../App';
+import { loginContext } from '../../users/context/LoginContextProvider';
+import { useHistory } from 'react-router-dom/';
 
 const MainNavigation = () => {
-    const { isLoggedIn, setIsLoggedIn } = useContext(loginContext);
+    const { isLoggedIn, internalLogout, user } = useContext(loginContext);
+    const history = useHistory()
     return (
-        <header style={{ position: 'sticky', top: 0 }}>
+        <header style={{ position: 'sticky', top: 0, zIndex: 99 }}>
             <Toolbar style={{
                 display: 'flex', flexDirection: 'row', alignItems: 'center',
                 justifyContent: 'center', zIndex: 10, backgroundColor: 'white',
@@ -20,16 +22,27 @@ const MainNavigation = () => {
                     <ul className='list' style={{ listStyleType: 'none', padding: 0, margin: 0, display: 'flex' }}>
                         <NavItem text="Home" route="/" />
                         <NavItem text="Menu" route="/Menu" />
-                        <NavItem text="Cart" route="/Cart" />
-                        {isLoggedIn ?
-                            <Button
-                                color="inherit"
-                                onClick={() => { setIsLoggedIn(false) }}
-                            >
-                                <Typography variant="h6">LOGOUT</Typography>
-                            </Button>
-                            :
-                            <NavItem text="Log in/Sign up" route="/Auth" />
+
+                        {
+                            isLoggedIn &&
+                            <NavItem text="Cart" route="/Cart" />
+                        }
+
+                        {
+                            isLoggedIn ?
+                                <>
+                                    <Button
+                                        color="inherit"
+                                        onClick={() => {
+                                            history.push('/');
+                                            internalLogout();
+                                        }}
+                                    >
+                                        <Typography variant="h6">LOGOUT</Typography>
+                                    </Button>
+                                </>
+                                :
+                                <NavItem text="Log in/Sign up" route="/Auth" />
                         }
                     </ul>
                 </nav>

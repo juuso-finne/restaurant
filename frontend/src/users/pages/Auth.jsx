@@ -1,20 +1,18 @@
 import { Stack, Typography, } from '@mui/material/';
-import { useContext, useEffect, useState } from "react";
-import { loginContext } from '../../App';
+import { useEffect, useState } from "react";
+import { CircularProgress } from '@mui/material/';
+import { useLoginMutation, useSignUpMutation } from '../Mutations/Mutations';
 import LoginForm from '../components/LoginForm';
 import SignUpForm from '../components/SignUpForm';
-import { useMutation } from "react-query"
-import { login, signup } from '../API/users';
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
-import { CircularProgress } from '@mui/material/';
+
+
 
 const Auth = () => {
-    const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(loginContext);
     const [headerText, setHeaderText] = useState('Log in');
     const [bottomText, setBottomText] = useState('Don\'t have an account? Sign up');
     const [hasAccount, setHasAccount] = useState(true);
     const [errorText, setErrorText] = useState("");
-    // const [isLoading, setIsLoading] = useState(false)
+
 
     useEffect(() => {
         if (hasAccount) {
@@ -26,96 +24,44 @@ const Auth = () => {
         }
     }, [hasAccount])
 
-    const loginMutation = useMutation({
-        mutationFn: login,
-        onSuccess: (response) => {
-            if (response.token) {
-                setUser(response.email);
-                setIsLoggedIn(true);
-                setErrorText("");
-            } else if (response.message) {
-                setErrorText(response.message);
-            }
-            //setIsLoading(false);
-        },
-        onError: (error) => {
-            console.log(error);
-            setErrorText("Network or server error");
-            //setIsLoading(false);
-        }
+    const loginMutation = useLoginMutation(setErrorText);
+    const signUpMutation = useSignUpMutation(setErrorText);
 
-    })
-
-    const signupMutation = useMutation({
-        mutationFn: signup,
-        onSuccess: (response) => {
-            if (response.token) {
-                setUser(response.email);
-                setIsLoggedIn(true);
-                setErrorText("");
-            } else if (response.message) {
-                setErrorText(response.message);
-            }
-
-            //setIsLoading(false);
-        },
-        onError: (error) => {
-            console.log(error)
-            setErrorText("Network or server error");
-            //setIsLoading(false);
-        }
-    })
-
-    const loginHandler = (data) => {
-        loginMutation.mutate(data);
-    }
-
-    const signupHandler = (data) => {
-        signupMutation.mutate(data)
-    }
 
     return (
-        <>
-            {!isLoggedIn ?
-                // Not logged in:
-                <Stack alignItems="center">
-                    <Typography variant='h2' component="h1">{headerText}</Typography>
-                    {hasAccount ?
-                        <LoginForm submitHandler={loginHandler} /> :
-                        <SignUpForm submitHandler={signupHandler} />
-                    }
-
-                    {/*Error text:*/}
-                    <Typography
-                        color="#FF0000"
-                        visibility={errorText.length === 0 ? "hidden" : "block"}
-                        variant='subtitle1'
-                    >
-                        {errorText}
-                    </Typography>
-
-                    {/* Loading icon */}
-                    {/* <CircularProgress style={{ visibility: isLoading ? 'block' : 'hidden' }} /> */}
-
-                    {/* Let the user choose login or signup:*/}
-                    <Typography
-                        onClick={() => {
-                            setHasAccount(oldValue => !oldValue)
-                            setErrorText("");
-                        }}
-                        component="a" href='#'
-                    >
-                        {bottomText}
-                    </Typography>
-                </Stack> :
-
-                // Logged in:
-                <Stack alignItems="center">
-                    <Typography>Logged in as {user}</Typography>
-                    <Typography component={NavLink} to='/'>Back to main page</Typography>
-                </Stack>
+        <Stack alignItems="center">
+            <Typography variant='h2' component="h1">{headerText}</Typography>
+            {
+                hasAccount ?
+                    <LoginForm submitHandler={data => loginMutation.mutate(data)} />
+                    :
+                    <SignUpForm submitHandler={data => signUpMutation.mutate(data)} />
             }
-        </>
+
+            {/*Error text TODO: Make own component*/}
+            <Typography
+                color="#FF0000"
+                visibility={errorText.length === 0 ? "hidden" : "block"}
+                variant='subtitle1'
+            >
+                {errorText}
+            </Typography>
+
+            {/* Loading icon */}
+            <CircularProgress style={{ visibility: (loginMutation.isLoading || signUpMutation.isLoading) ? 'block' : 'hidden' }} />
+
+            {/* Let the user toggle between login and signup TODO: Make own component*/}
+            <Typography
+                onClick={() => {
+                    setHasAccount(oldValue => !oldValue)
+                    setErrorText("");
+                }}
+                component="a" href='#'
+            >
+                {bottomText}
+            </Typography>
+
+        </Stack>
     )
 }
 

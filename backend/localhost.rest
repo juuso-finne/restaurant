@@ -53,14 +53,48 @@ Content-Type: application/json
 Authorization: BEARER
 
 {
-    "email": "petter@pettersson.com",
-    "password": "pettersson1234"
+    "email": "test@user.com",
+    "password": "testtesttest"
 }
 
 ####
+
+POST {{server}}/api/orders
+Content-Type: application/json
+Authorization: BEARER {{authToken}}
+
+{
+  "customerId": "1234567890",
+  "customer": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "street": "123 Main St",
+    "postalcode": "12345",
+    "city": "Example City"
+  },
+  "items": [
+    {
+      "name": "Product 1",
+      "price": 10.99,
+      "image": "product1.jpg",
+      "quantity": 2
+    },
+    {
+      "name": "Product 2",
+      "price": 19.99,
+      "image": "product2.jpg",
+      "quantity": 1
+    }
+  ]
+}
+
+
+#####
+
 
 @authToken = {{login.response.body.token}}
 #@server = http://172.16.5.16:5502
 @server = http://localhost:5502
 ######
+
 
