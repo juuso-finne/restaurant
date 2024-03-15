@@ -12,17 +12,18 @@ const Checkout = () => {
   const { user } = useContext(loginContext);
   const { cart, setCart } = useContext(CartContext);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [oldCart, setOldCart] = useState({});
-
-  const history = useHistory();
+  const [orderState, setOrderState] = useState({})
 
   const submitHandler = async (customerData) => {
     const apiUrl = `http://localhost:5502/api/orders`;
+
     const orderData = {
       customerId: user.id,
       customer: customerData,
       items: cart.items
-    };
+    }
+
+    setOrderState(orderData);
 
     try {
       const response = await fetch(
@@ -37,15 +38,15 @@ const Checkout = () => {
         }
       )
 
-      if (response.status !== 201) {
+      if (response.status === 201) {
+        setOrderPlaced(true);
+        setCart({ ...cart, items: [] });
+        window.scrollTo(0, 0);
+      } else {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const order = await response.json();
-      setOldCart(order);
-      setOrderPlaced(true);
-      setCart({ ...cart, items: [] });
-      window.scrollTo(0, 0);
+
 
     } catch (error) {
       console.log(error);
@@ -61,19 +62,22 @@ const Checkout = () => {
           {cart.items.length > 0 ?
             <>
               <Typography variant='h4' component="h3">Order summary:</Typography>
-              <OrderSummary cart={cart} />
+              <OrderSummary data={cart} />
               <CheckoutForm submitHandler={submitHandler} user={user} />
             </> :
             <>
-              <p>Your shopping cart is empty</p>
-              <p><Link to='/Menu'>Back to Menu</Link></p>
+              <Typography>Your shopping cart is empty</Typography>
+              <Typography><Link to='/Menu'>Back to Menu</Link></Typography>
             </>
           }
         </>
         :
         <>
           <Typography variant='h3'>Order successfully placed!</Typography>
-          <OrderSummary cart={oldCart} />
+          <OrderSummary data={orderState} />
+          <Typography>{orderState.customer.name}</Typography>
+          <Typography>{orderState.customer.street}, {orderState.customer.postalcode} {orderState.customer.city}</Typography>
+          <Typography><Link to='/'>Go to homepage</Link></Typography>
         </>}
     </Container>
   )

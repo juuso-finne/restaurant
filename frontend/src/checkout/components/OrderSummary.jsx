@@ -1,13 +1,13 @@
 import { Typography, List, ListItemText } from '@mui/material';
 
 
-const OrderSummary = ({ cart }) => {
+const OrderSummary = ({ data }) => {
 
 
     const totalPrice = () => {
         let total = 0;
-        if (cart.items.length !== 0) {
-            cart.items.forEach(cartItem => {
+        if (data.items.length !== 0) {
+            data.items.forEach(cartItem => {
                 total += cartItem.quantity * cartItem.price;
             });
         }
@@ -15,7 +15,7 @@ const OrderSummary = ({ cart }) => {
     }
 
     const getItemQuantity = (itemId) => {
-        const item = cart.items.find((cartItem) => cartItem.id === itemId);
+        const item = data.items.find((cartItem) => cartItem.id === itemId);
         return item ? item.quantity : 0;
     };
 
@@ -23,11 +23,11 @@ const OrderSummary = ({ cart }) => {
     return (
         <>
             <List>
-                {cart.items.map((cartItem) => {
+                {data.items.map((cartItem) => {
                     return (
                         <li key={cartItem.id}>
                             <Typography variant='body1'>
-                                {getItemQuantity(cartItem.id)} x {cartItem.name}
+                                {getItemQuantity(cartItem.id)} x {cartItem.name} á {cartItem.price}
                             </Typography>
                         </li>
                     )
