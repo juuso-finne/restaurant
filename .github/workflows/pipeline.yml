@@ -109,4 +109,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: false
-          tags: "${{ env.REGISTRY }}/${{ env.FRONTED_IMAGE_NAME }}"
+          tags: "${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}"
