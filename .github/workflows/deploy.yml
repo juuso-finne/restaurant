@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   BACKEND_IMAGE_NAME: tite-5g00ev16-3003/practice-project-backend-juuso-finne
+  FRONTEND_IMAGE_NAME: tite-5g00ev16-3003/practice-project-frontend-juuso-finne
 
 jobs:
   build:

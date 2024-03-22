@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   BACKEND_IMAGE_NAME: tite-5g00ev16-3003/practice-project-backend-juuso-finne
+  FRONTEND_IMAGE_NAME: tite-5g00ev16-3003/practice-project-frontend-juuso-finne
 
 jobs:
   test:
@@ -53,6 +54,12 @@ jobs:
         working-directory: ./backend
         run: npm run test
 
+      - name: Install frontend dependecies
+        working-directory: ./frontend
+        run: npm install
+
+      # TODO: Write and impelement frontend tests
+
   build:
     runs-on: ubuntu-latest
 
@@ -94,3 +101,12 @@ jobs:
           push: false
 
           tags: "${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}"
+
+
+      - name: Build the Frontend Image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: false
+          tags: "${{ env.REGISTRY }}/${{ env.FRONTED_IMAGE_NAME }}"
