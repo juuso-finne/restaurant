@@ -1,6 +1,6 @@
 export const login = async ({ email, password }) => {
     try {
-        const response = await fetch('http://localhost:5502/api/users/login', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export const login = async ({ email, password }) => {
 
 export const signup = async ({ name, email, password }) => {
     try {
-        const response = await fetch('http://localhost:5502/api/users/signup', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

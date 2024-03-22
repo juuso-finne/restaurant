@@ -10,7 +10,7 @@ const Menu = () => {
     const [apiEnabled, setApiEnabled] = useState(true);
 
     const { isLoading, error, data } = useQuery("menuItems", async () => {
-        const res = await fetch(`http://localhost:5502/api/menuitems`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/menuitems`);
         return await res.json();
     },
         { enabled: apiEnabled }
