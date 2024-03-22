@@ -7,6 +7,13 @@ services:
     env_file:
       - .env
     restart: always
+  frontend:
+    image: ${FRONTEND_IMAGE}
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    restart: always
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
@@ -17,8 +24,8 @@ services:
     ports:
       - '3306:3306'
     volumes:
-        - ./db/init.prod.sql:/docker-entrypoint-initdb.d/init.prod.sql
-        - mysql_data:/var/lib/mysql
+      - ./db/init.prod.sql:/docker-entrypoint-initdb.d/init.prod.sql
+      - mysql_data:/var/lib/mysql
 
 volumes:
   mysql_data:
