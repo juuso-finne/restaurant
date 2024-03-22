@@ -43,8 +43,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-
-
       - name: Build and Push the Backend Image
         uses: docker/build-push-action@v5.0.0
         with:
@@ -52,6 +50,18 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: "${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}"
+
+
+      - name: Create production .env file from secret
+        run: echo "${{ secrets.ENV_FILE_PROD }}" > ./frontend/.env
+
+      - name: Build the Frontend Image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: "${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}"
 
 
   # Workflow for deploying the containers on the server
@@ -108,6 +118,7 @@ jobs:
           cp db/init.prod.sql final_project/db/
           echo "${{ secrets.ENV_FILE_PROD }}" > final_project/.env
           echo "BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}" >> final_project/.env
+          echo "FRONTEND_IMAGE=${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}" >> final_project/.env
           rsync -r final_project "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_SERVER }}:./"
 
       - name: Start the containers via ssh

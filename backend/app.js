@@ -18,6 +18,7 @@ app.use(cors({
     'http://localhost:5173',
     'http://172.16.5.16:5173',
     'http://localhost:8080',
+    'http://172.16.5.16'
   ]
 }));
 app.use('/api/menuitems', menuRouter);
