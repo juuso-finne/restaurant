@@ -8,6 +8,8 @@ const queryClient = new QueryClient();
 
 function App() {
 
+  console.log(import.meta.env.VITE_API_BASE_URL)
+
   return (
     <GlobalContextProvider>
       <QueryClientProvider client={queryClient}>

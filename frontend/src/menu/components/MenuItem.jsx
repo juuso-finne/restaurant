@@ -18,7 +18,7 @@ const MenuItem = ({ product }) => {
     <Card style={{ display: "flex", alignItems: "center", maxWidth: "100%", margin: "10px" }}>
       <CardMedia
         component='img'
-        image={`http://localhost:5502/${product.image}`}
+        image={`${import.meta.env.VITE_API_BASE_URL}/${product.image}`}
         alt={product.name}
         style={{ objectFit: 'cover', width: '100px', height: '100px' }}
       />

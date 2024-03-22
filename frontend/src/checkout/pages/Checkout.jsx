@@ -15,7 +15,7 @@ const Checkout = () => {
   const [orderState, setOrderState] = useState({})
 
   const submitHandler = async (customerData) => {
-    const apiUrl = `http://localhost:5502/api/orders`;
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/orders`;
 
     const orderData = {
       customerId: user.id,
