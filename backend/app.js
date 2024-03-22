@@ -16,7 +16,7 @@ app.use(express.static('public'));
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'http://172.16.5.16:5173',
+    'http://172.16.5.16:5502',
     'http://localhost:8080',
     'http://172.16.5.16'
   ]
